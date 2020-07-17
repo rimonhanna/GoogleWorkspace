@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>Google Teams</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+          rel="stylesheet" />
+    <link href="css/index.css"
+          rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="titlebar">
+      <div class="app-icon"></div>
+      <button id="home">
+        <img src="assets/home.svg" />
+      </button>
+      <div class="title">Google Teams</div>
+
+      <div class="sexytabs">
+        <ul>
+          <li><a id="currents-tab" href="#Currents">
+              Currents</a></li>
+          <li><a id="chat-tab" href="#Chat">
+              Chat</a></li>
+          <li><a id="meet-tab" href="#Meet">
+              Meet</a></li>
+        </ul>
+        <div class="contents">
+          <div id="Currents"></div>
+          <div id="Chat"></div>
+          <div id="Meet"></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="minimize">
+          <img src="assets/window-minimize.svg" />
+        </button>
+        <button id="maximize">
+          <img src="assets/window-maximize.svg" />
+        </button>
+        <button id="restore">
+          <img src="assets/window-restore.svg" />
+        </button>
+        <button id="close">
+          <img src="assets/times.svg" />
+        </button>
+      </div>
+    </div>
+    <script src="scripts/window.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"
+            integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="
+            crossorigin="anonymous"></script>
+    <script>
+      $(".sexytabs").tabs({
+        show: { effect: "slide", direction: "left", duration: 200, easing: "easeOutBack" },
+        hide: { effect: "slide", direction: "right", duration: 200, easing: "easeInQuad" },
+        active: 1
+      });
+    </script>
+  </body>
+
+</html>

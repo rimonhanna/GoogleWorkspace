@@ -1,0 +1,175 @@
+* {
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #2586ED;
+  user-select: none;
+}
+
+.titlebar {
+  height: 40px;
+  width: 100%;
+  -webkit-app-region: drag;
+  display: flex;
+}
+
+.titlebar .title {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.titlebar .controls {
+  display: flex;
+}
+
+.titlebar button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  -webkit-app-region: no-drag;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titlebar button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.titlebar button img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+}
+
+.titlebar button:hover img {
+  opacity: 1;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Lato:100,300,400);
+.sexytabs > ul {
+  text-align: center;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+.sexytabs > ul > li {
+  display: inline-block;
+  padding: 0.6em 0;
+  position: relative;
+  width: 33%;
+  margin: 0 0 0 -4px;
+}
+.sexytabs > ul > li:before,
+.sexytabs > ul > li:after {
+  opacity: 0;
+  transition: 0.3s ease;
+}
+.sexytabs > ul > li.ui-tabs-active:before,
+.sexytabs > ul > li.ui-tabs-active:after,
+.sexytabs > ul > li.ui-state-hover:before,
+.sexytabs > ul > li.ui-state-hover:after,
+.sexytabs > ul > li.ui-state-focus:before,
+.sexytabs > ul > li.ui-state-focus:after {
+  opacity: 1;
+}
+.sexytabs > ul > li:before,
+.sexytabs > ul > li.ui-state-active.ui-state-hover:before,
+.sexytabs > ul > li.ui-state-active.ui-state-focus:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  /* box-shadow: 0 2px 3px rgba(22, 195, 255, 0.5); */
+  top: 50%;
+  bottom: 0px;
+  left: 5px;
+  right: 5px;
+  border-radius: 100px / 10px;
+}
+.sexytabs > ul > li:after,
+.sexytabs > ul > li.ui-state-active.ui-state-hover:after,
+.sexytabs > ul > li.ui-state-active.ui-state-focus:after {
+  content: "";
+  background: #fafafa;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: 50%;
+  bottom: -6px;
+  margin-left: -6px;
+  transform: rotate(45deg);
+  box-shadow: inset 3px 3px 3px rgba(22, 195, 255, 0.5), inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.sexytabs > ul > li.ui-state-hover:before,
+.sexytabs > ul > li.ui-state-focus:before {
+  /* box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2); */
+}
+.sexytabs > ul > li.ui-state-hover:after,
+.sexytabs > ul > li.ui-state-focus:after {
+  box-shadow: inset 3px 3px 3px rgba(0, 0, 0, 0.2), inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.sexytabs > ul > li:focus {
+  outline: none;
+}
+.sexytabs > ul > li a {
+  color: white;
+  text-decoration: none;
+}
+.sexytabs > ul > li a:focus {
+  outline: none;
+}
+.sexytabs > ul > li a span {
+  position: relative;
+  top: -0.5em;
+}
+
+.sexytabs.dark > ul {
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+.sexytabs.dark > ul > li {
+  background: #333;
+}
+.sexytabs.dark > ul > li:before,
+.sexytabs.dark > ul > li.ui-state-active.ui-state-hover:before,
+.sexytabs.dark > ul > li.ui-state-active.ui-state-focus:before {
+  /* box-shadow: 0 2px 3px rgba(255, 255, 255, 0.3); */
+}
+.sexytabs.dark > ul > li:after,
+.sexytabs.dark > ul > li.ui-state-active.ui-state-hover:after,
+.sexytabs.dark > ul > li.ui-state-active.ui-state-focus:after {
+  background: #333;
+  box-shadow: inset 3px 3px 3px rgba(255, 255, 255, 0.3), inset 1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+.sexytabs.dark > ul > li.ui-state-hover:before,
+.sexytabs.dark > ul > li.ui-state-focus:before {
+  box-shadow: none;
+}
+.sexytabs.dark > ul > li.ui-state-hover:after,
+.sexytabs.dark > ul > li.ui-state-focus:after {
+  box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.4);
+}
+.sexytabs.dark > ul > li a {
+  color: white;
+}
+
+.sexytabs {
+  width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
