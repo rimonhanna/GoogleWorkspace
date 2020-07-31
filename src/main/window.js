@@ -48,12 +48,33 @@ function createMainWindow() {
 
   ipcMain.on("window.meet", (event) => {
     mainWindow.setBrowserView(global.googleMeetView);
+
+    global.googleMeetView.setBounds({
+      x: 0,
+      y: 40,
+      width: mainWindow.getBounds().width,
+      height: mainWindow.getBounds().height - 40,
+    });
   });
   ipcMain.on("window.chat", (event) => {
     mainWindow.setBrowserView(global.googleChatView);
+
+    global.googleChatView.setBounds({
+      x: 0,
+      y: 40,
+      width: mainWindow.getBounds().width,
+      height: mainWindow.getBounds().height - 40,
+    });
   });
   ipcMain.on("window.currents", (event) => {
     mainWindow.setBrowserView(global.googleCurrentsView);
+
+    global.googleCurrentsView.setBounds({
+      x: 0,
+      y: 40,
+      width: mainWindow.getBounds().width,
+      height: mainWindow.getBounds().height - 40,
+    });
   });
 
   let handleNavigation = function (event, url, frameName, disposition, options) {
