@@ -7,6 +7,7 @@ const windowStateKeeper = require("electron-window-state");
 const GOOGLE_MEET_URL = "https://meet.google.com/";
 const GOOGLE_CHAT_URL = "https://chat.google.com/";
 const GOOGLE_CURRENTS_URL = "https://currents.google.com/";
+const GOOGLE_GROUPS_URL = "https://groups.google.com/";
 
 
 function createMainWindow() {
@@ -42,39 +43,26 @@ function createMainWindow() {
 
   mainWindow.maximize();
 
+  createGoogleGroupsView(mainWindow);
   createGoogleCurrentsView(mainWindow);
   createGoogleMeetView(mainWindow);
   createGoogleChatView(mainWindow);
 
   ipcMain.on("window.meet", (event) => {
     mainWindow.setBrowserView(global.googleMeetView);
-
-    global.googleMeetView.setBounds({
-      x: 0,
-      y: 40,
-      width: mainWindow.getBounds().width,
-      height: mainWindow.getBounds().height - 40,
-    });
+    global.googleMeetView.setBounds(adjustedBounds(mainWindow));
   });
   ipcMain.on("window.chat", (event) => {
     mainWindow.setBrowserView(global.googleChatView);
-
-    global.googleChatView.setBounds({
-      x: 0,
-      y: 40,
-      width: mainWindow.getBounds().width,
-      height: mainWindow.getBounds().height - 40,
-    });
+    global.googleChatView.setBounds(adjustedBounds(mainWindow));
   });
   ipcMain.on("window.currents", (event) => {
     mainWindow.setBrowserView(global.googleCurrentsView);
-
-    global.googleCurrentsView.setBounds({
-      x: 0,
-      y: 40,
-      width: mainWindow.getBounds().width,
-      height: mainWindow.getBounds().height - 40,
-    });
+    global.googleCurrentsView.setBounds(adjustedBounds(mainWindow));
+  });
+  ipcMain.on("window.groups", (event) => {
+    mainWindow.setBrowserView(global.googleGroupsView);
+    global.googleGroupsView.setBounds(adjustedBounds(mainWindow));
   });
 
   let handleNavigation = function (event, url, frameName, disposition, options) {
@@ -89,6 +77,9 @@ function createMainWindow() {
     } else if (url.includes("chat.google")) {
       global.googleChatView.webContents.loadURL(url);
       mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
+    } else if (url.includes("groups.google")) {
+      global.googleGroupsView.webContents.loadURL(url);
+      mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
     } else {
       shell.openExternal(url);
     }
@@ -97,6 +88,7 @@ function createMainWindow() {
   global.googleMeetView.webContents.on("new-window", handleNavigation);
   global.googleChatView.webContents.on("new-window", handleNavigation);
   global.googleCurrentsView.webContents.on("new-window", handleNavigation);
+  global.googleGroupsView.webContents.on("new-window", handleNavigation);
 
 
   mainWindow.on("maximize", () => {
@@ -178,24 +170,14 @@ function createGoogleMeetView(mainWindow) {
   mainWindow.addBrowserView(googleMeetView);
 
   googleMeetView.webContents.loadURL(url);
-  googleMeetView.setBounds({
-    x: 0,
-    y: 40,
-    width: mainWindow.getBounds().width,
-    height: mainWindow.getBounds().height - 40,
-  });
+  googleMeetView.setBounds(adjustedBounds(mainWindow));
   googleMeetView.webContents.on("did-finish-load", () => {
     googleMeetView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
   });
   // googleMeetView.webContents.openDevTools();
 
   mainWindow.on("resize", () => {
-    googleMeetView.setBounds({
-      x: 0,
-      y: 40,
-      width: mainWindow.getBounds().width,
-      height: mainWindow.getBounds().height - 40,
-    });
+    googleMeetView.setBounds(adjustedBounds(mainWindow));
   });
 
   ipcMain.on("window.home", () => {
@@ -222,24 +204,14 @@ function createGoogleChatView(mainWindow) {
   mainWindow.addBrowserView(googleChatView);
 
   googleChatView.webContents.loadURL(url);
-  googleChatView.setBounds({
-    x: 0,
-    y: 40,
-    width: mainWindow.getBounds().width,
-    height: mainWindow.getBounds().height - 40,
-  });
+  googleChatView.setBounds(adjustedBounds(mainWindow));
   googleChatView.webContents.on("did-finish-load", () => {
     googleChatView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
   });
   // googleChatView.webContents.openDevTools();
 
   mainWindow.on("resize", () => {
-    googleChatView.setBounds({
-      x: 0,
-      y: 40,
-      width: mainWindow.getBounds().width,
-      height: mainWindow.getBounds().height - 40,
-    });
+    googleChatView.setBounds(adjustedBounds(mainWindow));
   });
 
   ipcMain.on("window.home", () => {
@@ -255,36 +227,65 @@ function createGoogleCurrentsView(mainWindow) {
   }));
 
   let url = GOOGLE_CURRENTS_URL;
-  if (app.commandLine.hasSwitch("room-id")) {
-    url = GOOGLE_CURRENTS_URL + app.commandLine.getSwitchValue("room-id");
+  if (app.commandLine.hasSwitch("post-id")) {
+    url = GOOGLE_CURRENTS_URL + app.commandLine.getSwitchValue("post-id");
   }
 
   mainWindow.addBrowserView(googleCurrentsView);
 
   googleCurrentsView.webContents.loadURL(url);
-  googleCurrentsView.setBounds({
-    x: 0,
-    y: 40,
-    width: mainWindow.getBounds().width,
-    height: mainWindow.getBounds().height - 40,
-  });
+  googleCurrentsView.setBounds(adjustedBounds(mainWindow));
   googleCurrentsView.webContents.on("did-finish-load", () => {
     googleCurrentsView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
   });
   // googleCurrentsView.webContents.openDevTools();
 
   mainWindow.on("resize", () => {
-    googleCurrentsView.setBounds({
-      x: 0,
-      y: 40,
-      width: mainWindow.getBounds().width,
-      height: mainWindow.getBounds().height - 40,
-    });
+    googleCurrentsView.setBounds(adjustedBounds(mainWindow));
   });
 
   ipcMain.on("window.home", () => {
     googleCurrentsView.webContents.loadURL(GOOGLE_CURRENTS_URL);
   });
+}
+
+function createGoogleGroupsView(mainWindow) {
+  const googleGroupsView = (global.googleGroupsView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "..", "renderer", "adapters", "polyfill.js"),
+    },
+  }));
+
+  let url = GOOGLE_GROUPS_URL;
+  if (app.commandLine.hasSwitch("group-id")) {
+    url = GOOGLE_GROUPS_URL + app.commandLine.getSwitchValue("group-id");
+  }
+
+  mainWindow.addBrowserView(googleGroupsView);
+
+  googleGroupsView.webContents.loadURL(url);
+  googleGroupsView.setBounds(adjustedBounds(mainWindow));
+  googleGroupsView.webContents.on("did-finish-load", () => {
+    googleGroupsView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
+  });
+  // googleGroupsView.webContents.openDevTools();
+
+  mainWindow.on("resize", () => {
+    googleGroupsView.setBounds(adjustedBounds(mainWindow));
+  });
+
+  ipcMain.on("window.home", () => {
+    googleGroupsView.webContents.loadURL(GOOGLE_GROUPS_URL);
+  });
+}
+
+function adjustedBounds(mainWindow) {
+  return {
+    x: 0,
+    y: 40,
+    width: mainWindow.getBounds().width,
+    height: mainWindow.getBounds().height - 40
+  }
 }
 
 function createCanvasWindow() {

@@ -20,6 +20,8 @@
 
       <div class="sexytabs">
         <ul>
+          <li><a id="groups-tab" href="#Groups">
+              Groups</a></li>
           <li><a id="currents-tab" href="#Currents">
               Currents</a></li>
           <li><a id="chat-tab" href="#Chat">
@@ -28,6 +30,7 @@
               Meet</a></li>
         </ul>
         <div class="contents">
+          <div id="Groups"></div>
           <div id="Currents"></div>
           <div id="Chat"></div>
           <div id="Meet"></div>
@@ -60,7 +63,7 @@
       $(".sexytabs").tabs({
         show: { effect: "slide", direction: "left", duration: 200, easing: "easeOutBack" },
         hide: { effect: "slide", direction: "right", duration: 200, easing: "easeInQuad" },
-        active: 1
+        active: 2
       });
     </script>
   </body>

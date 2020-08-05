@@ -9,8 +9,12 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  background: #2586ED;
+  background: white;
   user-select: none;
+}
+
+.titlebar img {
+  filter: invert(0.5) sepia(1) saturate(40) hue-rotate(185deg);
 }
 
 .titlebar {
@@ -21,7 +25,7 @@ body {
 }
 
 .titlebar .title {
-  color: white;
+  color: #2586ED;
   font-size: 14px;
   font-weight: 600;
   display: flex;
@@ -73,7 +77,7 @@ body {
   display: inline-block;
   padding: 0.6em 0;
   position: relative;
-  width: 33%;
+  width: 25%;
   margin: 0 0 0 -4px;
 }
 .sexytabs > ul > li:before,
@@ -106,7 +110,7 @@ body {
 .sexytabs > ul > li.ui-state-active.ui-state-hover:after,
 .sexytabs > ul > li.ui-state-active.ui-state-focus:after {
   content: "";
-  background: #fafafa;
+  background: rgb(37, 134, 237);
   position: absolute;
   width: 12px;
   height: 12px;
@@ -114,21 +118,19 @@ body {
   bottom: -6px;
   margin-left: -6px;
   transform: rotate(45deg);
-  box-shadow: inset 3px 3px 3px rgba(22, 195, 255, 0.5), inset 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 .sexytabs > ul > li.ui-state-hover:before,
 .sexytabs > ul > li.ui-state-focus:before {
   /* box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2); */
 }
-.sexytabs > ul > li.ui-state-hover:after,
-.sexytabs > ul > li.ui-state-focus:after {
-  box-shadow: inset 3px 3px 3px rgba(0, 0, 0, 0.2), inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+.sexytabs > ul > li.ui-state-hover:after {
+  box-shadow: inset 5px 5px 5px rgba(255, 255, 255, 0.7), inset 1px 1px 1px rgba(255, 255, 255, 0.3);
 }
 .sexytabs > ul > li:focus {
   outline: none;
 }
 .sexytabs > ul > li a {
-  color: white;
+  color: #2586ED;
   text-decoration: none;
 }
 .sexytabs > ul > li a:focus {

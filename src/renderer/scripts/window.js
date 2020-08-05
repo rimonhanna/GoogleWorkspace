@@ -6,6 +6,7 @@ const closeButton = document.getElementById("close");
 const meet = document.getElementById("meet-tab");
 const chat = document.getElementById("chat-tab");
 const currents = document.getElementById("currents-tab");
+const groups = document.getElementById("groups-tab");
 
 meet.addEventListener("click", () => {
   ipc.send("window.meet");
@@ -15,6 +16,9 @@ chat.addEventListener("click", () => {
 });
 currents.addEventListener("click", () => {
   ipc.send("window.currents");
+});
+groups.addEventListener("click", () => {
+  ipc.send("window.groups");
 });
 
 restoreButton.style.display = "none";
