@@ -80,6 +80,10 @@ function createMainWindow() {
     } else if (url.includes("groups.google")) {
       global.googleGroupsView.webContents.loadURL(url);
       mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
+    } else  if (url.includes("notion.so")) {
+      shell.openExternal(url.replace("https://", "notion://"))
+    } else  if (url.includes("zoom.us")) {
+      shell.openExternal(url.replace("https://", "zoommtg://").replace("/j/", "/start?confno="))
     } else {
       shell.openExternal(url);
     }
