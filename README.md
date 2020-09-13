@@ -1,6 +1,6 @@
 # Google Teams Desktop (Unofficial)
 
-**Unofficial desktop application for Google Teams built with electron.**
+**Unofficial desktop application for Google Teams (Google Meet, Chat, Currents, and Groups in one app) built with electron.**
 
 ![Screenshot of Google Teams Desktop](.....jpg)
 
