@@ -68,6 +68,11 @@ function createMainWindow() {
   let handleNavigation = function (event, url, frameName, disposition, options) {
     event.preventDefault();
 
+    var urlArray = url.split("dest=");
+    if(urlArray.length > 1) {
+        url = unescape(urlArray[1]);
+    }
+
     if (url.includes("meet.google")) {
       global.googleMeetView.webContents.loadURL(url);
       mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
