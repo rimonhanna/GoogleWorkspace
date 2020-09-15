@@ -1,6 +1,6 @@
 {
   "name": "google-teams",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "An unofficial desktop app for Google Teams",
   "main": "./src/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "author": "Rimon Hanna",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^10.1.1",
+    "electron": "^8.4.0",
     "electron-builder": "^22.8.0"
   },
   "dependencies": {
