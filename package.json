@@ -31,6 +31,7 @@
     "appId": "com.rimonhanna.googleTeams",
     "productName": "Google Teams",
     "mac": {
+      "target": "zip",
       "extendInfo": {
         "NSCameraUsageDescription": "This app requires camera access for video call in Google Meet.",
         "NSMicrophoneUsageDescription": "This app requires microphone access for audio call in Google Meet."
