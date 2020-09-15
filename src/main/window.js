@@ -51,24 +51,20 @@ function createMainWindow() {
   ipcMain.on("window.meet", (event) => {
     mainWindow.setBrowserView(global.googleMeetView);
     global.googleMeetView.setBounds(adjustedBounds(mainWindow));
-    global.googleMeetView.setBounds(adjustedBounds(mainWindow));
     global.googleMeetView.webContents.focus();
   });
   ipcMain.on("window.chat", (event) => {
     mainWindow.setBrowserView(global.googleChatView);
-    global.googleChatView.setBounds(adjustedBounds(mainWindow));
     global.googleChatView.setBounds(adjustedBounds(mainWindow));
     global.googleChatView.webContents.focus();
   });
   ipcMain.on("window.currents", (event) => {
     mainWindow.setBrowserView(global.googleCurrentsView);
     global.googleCurrentsView.setBounds(adjustedBounds(mainWindow));
-    global.googleCurrentsView.setBounds(adjustedBounds(mainWindow));
     global.googleCurrentsView.webContents.focus();
   });
   ipcMain.on("window.groups", (event) => {
     mainWindow.setBrowserView(global.googleGroupsView);
-    global.googleGroupsView.setBounds(adjustedBounds(mainWindow));
     global.googleGroupsView.setBounds(adjustedBounds(mainWindow));
     global.googleGroupsView.webContents.focus();
   });
