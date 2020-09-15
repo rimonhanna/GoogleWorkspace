@@ -25,6 +25,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - run: sudo apt install wine64
         
       - uses: actions/setup-node@v2-beta
         with:
