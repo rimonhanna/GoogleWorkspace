@@ -68,7 +68,10 @@ jobs:
           file_pattern: ./package*.json
           push_options: "--force"
 
-      - run: cd dist
+      - run: |
+          cd dist
+          ls
+          test -f Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
