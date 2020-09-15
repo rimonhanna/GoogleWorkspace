@@ -47,7 +47,7 @@ jobs:
             | sed 's/[",]//g' \
             | tr -d '[[:space:]]')
           echo $PACKAGE_VERSION
-          echo '::set-env name=PACKAGE_VERSION::"$(PACKAGE_VERSION)"'
+          echo ::set-env name=PACKAGE_VERSION::$(PACKAGE_VERSION)
 
       - name: Create Release
         id: create_release
