@@ -22,7 +22,7 @@ jobs:
           
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
-          npm version patch --commit-hooks
+          npm version patch --no-git-tag-version
           npm run dist
           
       - name: Get package version
