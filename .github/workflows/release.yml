@@ -71,7 +71,7 @@ jobs:
       - run: |
           cd dist
           ls
-          test -f Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip
+          test -f "Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip"
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -79,6 +79,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip
-          asset_name: Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip
+          asset_path: "Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip"
+          asset_name: "Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip"
           asset_content_type: application/zip
