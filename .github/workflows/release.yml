@@ -61,6 +61,13 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: "Commit updated package.json to repo"
+        uses: stefanzweifel/git-auto-commit-action@v4.4.0
+        with:
+          commit_message: "Created new package version"
+          file_pattern: ./package*.json
+          push_options: "--force"
+
       - run: cd dist
       - name: Upload Release Asset
         id: upload-release-asset
@@ -72,11 +79,3 @@ jobs:
           asset_path: Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip
           asset_name: Google Teams-${{ env.PACKAGE_VERSION }}-mac.zip
           asset_content_type: application/zip
-          
-      - run: cd ..
-      - name: "Commit updated package.json to repo"
-        uses: stefanzweifel/git-auto-commit-action@v4.4.0
-        with:
-          commit_message: "Created new package version"
-          file_pattern: ./package*.json
-          push_options: "--force"
