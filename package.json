@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder -mwl --publish=never"
+    "dist": "electron-builder --mac --publish=never"
   },
   "repository": "https://github.com/rimonhanna/GoogleTeams",
   "keywords": [
