@@ -28,12 +28,15 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
-          
-      - name: Build project # This would actually build your project, using zip for an example artifact
-        run: |
-          npm version patch --no-git-tag-version
-          npm install
-          npm run dist
+      
+      - name: Increment version
+        run: npm version patch --no-git-tag-version
+
+      - name: Install dependancies
+        run: npm install
+
+      - name: Build project
+        run: npm run dist
           
       - name: Get package version
         run: |
@@ -46,12 +49,6 @@ jobs:
           echo $PACKAGE_VERSION
           echo '::set-env name=PACKAGE_VERSION::$PACKAGE_VERSION'
 
-
-#       - name:  'Automated Version Bump'
-#         uses:  'phips28/gh-action-bump-version@master'
-#         with:
-#           tag-prefix:  ''
-    
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -72,3 +69,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./dist/Google Teams-${{ env.PACKAGE_VERSION }}
           asset_name: Google Teams-${{ env.PACKAGE_VERSION }}
+          asset_content_type: application/zip
