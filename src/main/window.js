@@ -185,8 +185,8 @@ function setMainMenu() {
   const menuTemplate = defaultMenu(app, shell);
  
   // Add custom menu 
-  menuTemplate[0].submenu.splice(1, 0, {
-    label: 'Preferences',
+  menuTemplate[2].submenu.splice(0, 0, {
+    label: 'Groups',
     click: (item, focusedWindow) => {
 
     }
