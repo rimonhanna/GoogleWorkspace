@@ -11,18 +11,14 @@ const calendar = document.getElementById("calendar-tab");
 
 meet.addEventListener("click", () => {
   ipc.send("window.meet");
-  ipc.send("window.meet");
 });
 chat.addEventListener("click", () => {
-  ipc.send("window.chat");
   ipc.send("window.chat");
 });
 currents.addEventListener("click", () => {
   ipc.send("window.currents");
-  ipc.send("window.currents");
 });
 groups.addEventListener("click", () => {
-  ipc.send("window.groups");
   ipc.send("window.groups");
 });
 calendar.addEventListener("click", () => {

@@ -1,7 +1,8 @@
 /* All window creation functions */
 const path = require("path");
 const fs = require("fs");
-const { BrowserWindow, BrowserView, ipcMain, screen, app, shell } = require("electron");
+const defaultMenu = require('electron-default-menu');
+const { BrowserWindow, BrowserView, Menu, MenuItem, ipcMain, screen, app, shell } = require("electron");
 const windowStateKeeper = require("electron-window-state");
 
 const GOOGLE_MEET_URL = "https://meet.google.com/";
@@ -33,6 +34,7 @@ function createMainWindow() {
       preload: path.join(__dirname, "..", "renderer", "preload.js"),
     },
   }));
+  setMainMenu();
   mainWindowState.manage(mainWindow);
   mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
   // mainWindow.webContents.openDevTools();
@@ -176,6 +178,22 @@ function createMainWindow() {
   });
 
   return mainWindow;
+}
+
+function setMainMenu() {
+  // Get template for default menu 
+  const menuTemplate = defaultMenu(app, shell);
+ 
+  // Add custom menu 
+  menuTemplate[0].submenu.splice(1, 0, {
+    label: 'Preferences',
+    click: (item, focusedWindow) => {
+
+    }
+  });
+ 
+  // Set top-level application menu, using modified template 
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
 function createGoogleMeetView(mainWindow) {
