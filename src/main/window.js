@@ -8,6 +8,7 @@ const GOOGLE_MEET_URL = "https://meet.google.com/";
 const GOOGLE_CHAT_URL = "https://chat.google.com/";
 const GOOGLE_CURRENTS_URL = "https://currents.google.com/";
 const GOOGLE_GROUPS_URL = "https://groups.google.com/my-groups";
+const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar";
 
 
 function createMainWindow() {
@@ -46,6 +47,7 @@ function createMainWindow() {
   createGoogleGroupsView(mainWindow);
   createGoogleCurrentsView(mainWindow);
   createGoogleMeetView(mainWindow);
+  createGoogleCalendarView(mainWindow);
   createGoogleChatView(mainWindow);
 
   ipcMain.on("window.meet", (event) => {
@@ -68,6 +70,11 @@ function createMainWindow() {
     global.googleGroupsView.setBounds(adjustedBounds(mainWindow));
     global.googleGroupsView.webContents.focus();
   });
+  ipcMain.on("window.calendar", (event) => {
+    mainWindow.setBrowserView(global.googleCalendarView);
+    global.googleCalendarView.setBounds(adjustedBounds(mainWindow));
+    global.googleCalendarView.webContents.focus();
+  });
 
   let handleNavigation = function (event, url, frameName, disposition, options) {
     event.preventDefault();
@@ -89,6 +96,9 @@ function createMainWindow() {
     } else if (url.includes("groups.google")) {
       global.googleGroupsView.webContents.loadURL(url);
       mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
+    } else if (url.includes("calendar.google")) {
+      global.googleCalendarView.webContents.loadURL(url);
+      mainWindow.webContents.executeJavaScript("document.getElementById('calendar-tab').click();");
     } else  if (url.includes("notion.so")) {
       shell.openExternal(url.replace("https://", "notion://"))
     } else  if (url.includes("zoom.us")) {
@@ -102,7 +112,7 @@ function createMainWindow() {
   global.googleChatView.webContents.on("new-window", handleNavigation);
   global.googleCurrentsView.webContents.on("new-window", handleNavigation);
   global.googleGroupsView.webContents.on("new-window", handleNavigation);
-
+  global.googleCalendarView.webContents.on("new-window", handleNavigation);
 
   mainWindow.on("maximize", () => {
     mainWindow.webContents.send("window.maximized");
@@ -229,6 +239,29 @@ function createGoogleChatView(mainWindow) {
 
   ipcMain.on("window.home", () => {
     googleChatView.webContents.loadURL(GOOGLE_CHAT_URL);
+  });
+}
+
+function createGoogleCalendarView(mainWindow) {
+  const googleCalendarView = (global.googleCalendarView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "..", "renderer", "adapters", "polyfill.js"),
+    },
+  }));
+  let url = GOOGLE_CALENDAR_URL;
+  mainWindow.addBrowserView(googleCalendarView);
+  googleCalendarView.webContents.loadURL(url);
+  googleCalendarView.setBounds(adjustedBounds(mainWindow));
+  googleCalendarView.webContents.on("did-finish-load", () => {
+    googleCalendarView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
+  });
+
+  mainWindow.on("resize", () => {
+    googleCalendarView.setBounds(adjustedBounds(mainWindow));
+  });
+
+  ipcMain.on("window.home", () => {
+    googleCalendarView.webContents.loadURL(GOOGLE_CURRENTS_URL);
   });
 }
 
