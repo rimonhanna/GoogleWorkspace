@@ -1,7 +1,7 @@
 /* All window creation functions */
 const path = require("path");
 const fs = require("fs");
-const defaultMenu = require('electron-default-menu');
+const defaultMenu = require("electron-default-menu");
 const { BrowserWindow, BrowserView, Menu, MenuItem, ipcMain, screen, app, shell } = require("electron");
 const windowStateKeeper = require("electron-window-state");
 
@@ -10,7 +10,6 @@ const GOOGLE_CHAT_URL = "https://chat.google.com/";
 const GOOGLE_CURRENTS_URL = "https://currents.google.com/";
 const GOOGLE_GROUPS_URL = "https://groups.google.com/my-groups";
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar";
-
 
 function createMainWindow() {
   const mainWindowState = windowStateKeeper({
@@ -82,8 +81,8 @@ function createMainWindow() {
     event.preventDefault();
 
     var urlArray = url.split("dest=");
-    if(urlArray.length > 1) {
-        url = unescape(urlArray[1]);
+    if (urlArray.length > 1) {
+      url = unescape(urlArray[1]);
     }
 
     if (url.includes("meet.google")) {
@@ -181,18 +180,32 @@ function createMainWindow() {
 }
 
 function setMainMenu() {
-  // Get template for default menu 
+  // Get template for default menu
   const menuTemplate = defaultMenu(app, shell);
- 
-  // Add custom menu 
-  menuTemplate[2].submenu.splice(0, 0, {
-    label: 'Groups',
-    click: (item, focusedWindow) => {
 
-    }
+  // Add custom menu
+  menuTemplate[2].submenu.unshift({
+    type: "separator",
   });
- 
-  // Set top-level application menu, using modified template 
+  menuTemplate[2].submenu.unshift({
+    label: "Admin",
+    type: "checkbox",
+    click: (item, focusedWindow) => {},
+  });
+  menuTemplate[2].submenu.unshift({
+    label: "Groups",
+    type: "checkbox",
+    checked: true,
+    click: (item, focusedWindow) => {},
+  });
+  menuTemplate[2].submenu.unshift({
+    label: "Calendar",
+    type: "checkbox",
+    checked: true,
+    click: (item, focusedWindow) => {},
+  });
+
+  // Set top-level application menu, using modified template
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
@@ -348,8 +361,8 @@ function adjustedBounds(mainWindow) {
     x: 0,
     y: 40,
     width: mainWindow.getBounds().width,
-    height: mainWindow.getBounds().height - 40
-  }
+    height: mainWindow.getBounds().height - 40,
+  };
 }
 
 function createCanvasWindow() {
