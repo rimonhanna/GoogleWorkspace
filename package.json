@@ -1,6 +1,6 @@
 {
   "name": "google-teams",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "An unofficial desktop app for Google Teams",
   "main": "./src/index.js",
   "scripts": {
