@@ -39,7 +39,7 @@ jobs:
       - name: Prepare for app notarization
         run: |
             mkdir -p ~/private_keys/
-            echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
+            echo '${{ secrets.APPLE_API_KEY }}' > ~/private_keys/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
@@ -50,15 +50,6 @@ jobs:
         env:
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
-
-
-
-
-
-      # - name: Build project
-      #   run: npm run dist
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get package version
         run: |
