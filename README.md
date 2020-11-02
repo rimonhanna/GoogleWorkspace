@@ -1,8 +1,8 @@
-# Google Teams Desktop (Unofficial)
+# Google Workspace Desktop (Unofficial)
 
-**Unofficial desktop application for Google Teams (Google Meet, Chat, Currents, and Groups in one app) built with electron.**
+**Unofficial desktop application for Google Workspace (Google Meet, Chat, Currents, and Groups in one app) built with electron.**
 
-![Screenshot of Google Teams Desktop](.....jpg)
+![Screenshot of Google Workspace Desktop](.....jpg)
 
 ## Features
 
@@ -30,15 +30,15 @@
 
 ## Installation
 
-You can [download the latest release](https://github.com/rimonhanna/GoogleTeams/releases) for your operating system or build it yourself (see below).
+You can [download the latest release](https://github.com/rimonhanna/GoogleWorkspace/releases) for your operating system or build it yourself (see below).
 
 ## Building
 
 You'll need [Node.js](https://nodejs.org) installed on your computer in order to build this app.
 
 ```bash
-$ git clone https://github.com/rimonhanna/GoogleTeams
-$ cd GoogleTeams
+$ git clone https://github.com/rimonhanna/GoogleWorkspace
+$ cd GoogleWorkspace
 $ npm install
 $ npm start
 ```

@@ -3,31 +3,39 @@ const minimizeButton = document.getElementById("minimize");
 const maximizeButton = document.getElementById("maximize");
 const restoreButton = document.getElementById("restore");
 const closeButton = document.getElementById("close");
-const meet = document.getElementById("meet-tab");
-const chat = document.getElementById("chat-tab");
-const currents = document.getElementById("currents-tab");
-const groups = document.getElementById("groups-tab");
-const calendar = document.getElementById("calendar-tab");
 
-meet.addEventListener("click", () => {
-  ipc.send("window.meet");
-  ipc.send("window.meet");
-});
-chat.addEventListener("click", () => {
-  ipc.send("window.chat");
-  ipc.send("window.chat");
-});
-currents.addEventListener("click", () => {
-  ipc.send("window.currents");
-  ipc.send("window.currents");
+const admin = document.getElementById("admin-tab");
+const groups = document.getElementById("groups-tab");
+const currents = document.getElementById("currents-tab");
+const mail = document.getElementById("mail-tab");
+const chat = document.getElementById("chat-tab");
+const meet = document.getElementById("meet-tab");
+const calendar = document.getElementById("calendar-tab");
+const drive = document.getElementById("drive-tab");
+
+admin.addEventListener("click", () => {
+  ipc.send("window.admin");
 });
 groups.addEventListener("click", () => {
   ipc.send("window.groups");
-  ipc.send("window.groups");
+});
+currents.addEventListener("click", () => {
+  ipc.send("window.currents");
+});
+mail.addEventListener("click", () => {
+  ipc.send("window.mail");
+});
+chat.addEventListener("click", () => {
+  ipc.send("window.chat");
+});
+meet.addEventListener("click", () => {
+  ipc.send("window.meet");
 });
 calendar.addEventListener("click", () => {
   ipc.send("window.calendar");
-  ipc.send("window.calendar");
+});
+drive.addEventListener("click", () => {
+  ipc.send("window.drive");
 });
 
 restoreButton.style.display = "none";

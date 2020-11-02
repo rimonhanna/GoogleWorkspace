@@ -13,6 +13,10 @@ body {
   user-select: none;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .titlebar img {
   filter: invert(0.5) sepia(1) saturate(85) hue-rotate(211deg);
 }
@@ -75,10 +79,10 @@ body {
 }
 .sexytabs > ul > li {
   display: inline-block;
-  padding: 0.6em 0;
+  padding: 0.6em 0.6em;
   position: relative;
-  width: 20%;
-  margin: 0 0 0 -4px;
+  margin: 0 auto;
+  text-align: center;
 }
 .sexytabs > ul > li:before,
 .sexytabs > ul > li:after {
@@ -171,7 +175,8 @@ body {
 }
 
 .sexytabs {
-  width: 560px;
+  width: 620px;
   margin-left: auto;
   margin-right: auto;
+  padding-right: 55px;
 }
