@@ -112,30 +112,30 @@ const template = [
         checked: store.get(USER_PREF_KEYS.SHOW_ADMIN),
         click: toggleAdminView,
       },
-      {
-        label: "Groups",
-        type: "checkbox",
-        checked: true,
-        click: (item, focusedWindow) => {},
-      },
-      {
-        label: "Mail",
-        type: "checkbox",
-        checked: true,
-        click: (item, focusedWindow) => {},
-      },
-      {
-        label: "Calendar",
-        type: "checkbox",
-        checked: true,
-        click: (item, focusedWindow) => {},
-      },
-      {
-        label: "Drive",
-        type: "checkbox",
-        checked: true,
-        click: (item, focusedWindow) => {},
-      }
+      // {
+      //   label: "Groups",
+      //   type: "checkbox",
+      //   checked: true,
+      //   click: (item, focusedWindow) => {},
+      // },
+      // {
+      //   label: "Mail",
+      //   type: "checkbox",
+      //   checked: true,
+      //   click: (item, focusedWindow) => {},
+      // },
+      // {
+      //   label: "Calendar",
+      //   type: "checkbox",
+      //   checked: true,
+      //   click: (item, focusedWindow) => {},
+      // },
+      // {
+      //   label: "Drive",
+      //   type: "checkbox",
+      //   checked: true,
+      //   click: (item, focusedWindow) => {},
+      // }
     ],
   },
   {
