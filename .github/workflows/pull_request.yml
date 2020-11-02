@@ -29,9 +29,6 @@ jobs:
         with:
           node-version: "14"
 
-      - name: Increment version
-        run: npm version patch --no-git-tag-version
-
       - name: Install dependancies
         run: npm install
 
