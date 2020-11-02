@@ -46,12 +46,12 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           mac_certs: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
+          mac_certs_password: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
         env:
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
 
 
-          # mac_certs_password: ${{ secrets.mac_certs_password }}
 
 
 
