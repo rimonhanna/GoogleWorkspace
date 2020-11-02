@@ -1,14 +1,15 @@
 {
-  "name": "google-teams",
-  "version": "1.2.11",
-  "description": "An unofficial desktop app for Google Teams",
+  "name": "google-workspace",
+  "productName": "Google Workspace",
+  "version": "1.3.0",
+  "description": "An unofficial desktop app for Google Workspace",
   "main": "./src/index.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --publish=never"
+    "dist": "electron-builder"
   },
-  "repository": "https://github.com/rimonhanna/GoogleTeams",
+  "repository": "https://github.com/rimonhanna/GoogleWorkspace",
   "keywords": [
     "Electron",
     "quick",
@@ -23,15 +24,21 @@
     "electron-builder": "^22.8.0"
   },
   "dependencies": {
+    "about-window": "^1.13.4",
+    "darkreader": "^4.9.22",
+    "electron-context-menu": "^2.3.0",
     "electron-default-menu": "^1.0.2",
     "electron-is-dev": "^1.2.0",
+    "electron-localshortcut": "^3.2.1",
     "electron-settings": "^4.0.2",
+    "electron-store": "^6.0.1",
+    "electron-updater": "^4.3.5",
     "electron-window-state": "^5.0.3",
     "mac-screen-capture-permissions": "^1.1.0"
   },
   "build": {
-    "appId": "com.rimonhanna.googleTeams",
-    "productName": "Google Teams",
+    "appId": "com.rimonhanna.googleWorkspace",
+    "productName": "Google Workspace",
     "mac": {
       "extendInfo": {
         "NSCameraUsageDescription": "This app requires camera access for video call in Google Meet.",

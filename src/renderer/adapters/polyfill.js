@@ -41,24 +41,27 @@ const { getScreenId } = require("./screen");
     };
   }
 
-  const originalGU = window.navigator.mediaDevices.getUserMedia.bind(
-    navigator.mediaDevices
-  );
-  window.navigator.mediaDevices.getUserMedia = function (constraints) {
-    if (
-      constraints.video &&
-      constraints.video.mandatory &&
-      constraints.video.mandatory.chromeMediaSource === "desktop"
-    )
-      constraints.audio = false;
-    return originalGU(constraints);
-  };
+  if (window.navigator.mediaDevices != undefined) {
+    const originalGU = window.navigator.mediaDevices.getUserMedia.bind(
+      navigator.mediaDevices
+    );
+    window.navigator.mediaDevices.getUserMedia = function (constraints) {
+      if (
+        constraints.video &&
+        constraints.video.mandatory &&
+        constraints.video.mandatory.chromeMediaSource === "desktop"
+      )
+        constraints.audio = false;
+      return originalGU(constraints);
+    };
+  }
+
 
   window.chrome = { runtime: {} };
 
   window.chrome.runtime.connect = connect;
 
-  window.chrome.runtime.sendMessage = sendMessage;
+  // window.chrome.runtime.sendMessage = sendMessage;
 
   async function waitForScreenShareToStop() {
     await waitForElement(`[jsname="FwVQ4"] [jsname="v2aOce"]`);

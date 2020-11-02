@@ -1,15 +1,48 @@
 /* All window creation functions */
 const path = require("path");
 const fs = require("fs");
+const store = require("../helpers/store");
+const {
+  CONSTANTS: { USER_PREF_KEYS },
+} = require("../helpers/util");
+
 const defaultMenu = require("electron-default-menu");
 const { BrowserWindow, BrowserView, Menu, MenuItem, ipcMain, screen, app, shell } = require("electron");
 const windowStateKeeper = require("electron-window-state");
+const contextMenu = require('electron-context-menu');
+const { WIN_USERAGENT, MAC_USERAGENT, LINUX_USERAGENT } = require("../constants");
 
-const GOOGLE_MEET_URL = "https://meet.google.com/";
-const GOOGLE_CHAT_URL = "https://chat.google.com/";
-const GOOGLE_CURRENTS_URL = "https://currents.google.com/";
+const windowState = require("electron-window-state");
+const electronLocalshortcut = require("electron-localshortcut");
+const { checkForUpdates } = require("../helpers/updater");
+const { template } = require("./menu");
+const {
+  TITLE_BAR_HEIGHT,
+  openUrlInBrowser,
+  shouldOpenLinkInBrowser,
+} = require("../helpers/util");
+
+const GOOGLE_ADMIN_URL = "https://admin.google.com/";
 const GOOGLE_GROUPS_URL = "https://groups.google.com/my-groups";
+const GOOGLE_CURRENTS_URL = "https://currents.google.com/";
+const GOOGLE_MAIL_URL = "https://mail.google.com/";
+const GOOGLE_CHAT_URL = "https://chat.google.com/";
+const GOOGLE_MEET_URL = "https://meet.google.com/";
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar";
+const GOOGLE_DRIVE_URL = "https://drive.google.com/";
+
+var userAgent;
+if (process.platform === "win32") {
+  userAgent = WIN_USERAGENT;
+} else if (process.platform === "darwin") {
+  userAgent = MAC_USERAGENT;
+} else {
+  userAgent = LINUX_USERAGENT;
+}
+
+contextMenu({
+  showSaveImageAs: true
+});
 
 function createMainWindow() {
   const mainWindowState = windowStateKeeper({
@@ -28,12 +61,15 @@ function createMainWindow() {
     minHeight: 600,
     frame: false,
     webPreferences: {
+      spellcheck: true,
       nodeIntegration: true,
       contextIsolation: true,
-      preload: path.join(__dirname, "..", "renderer", "preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
   }));
+
   setMainMenu();
+
   mainWindowState.manage(mainWindow);
   mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
   // mainWindow.webContents.openDevTools();
@@ -45,38 +81,6 @@ function createMainWindow() {
 
   mainWindow.maximize();
 
-  createGoogleGroupsView(mainWindow);
-  createGoogleCurrentsView(mainWindow);
-  createGoogleMeetView(mainWindow);
-  createGoogleCalendarView(mainWindow);
-  createGoogleChatView(mainWindow);
-
-  ipcMain.on("window.meet", (event) => {
-    mainWindow.setBrowserView(global.googleMeetView);
-    global.googleMeetView.setBounds(adjustedBounds(mainWindow));
-    global.googleMeetView.webContents.focus();
-  });
-  ipcMain.on("window.chat", (event) => {
-    mainWindow.setBrowserView(global.googleChatView);
-    global.googleChatView.setBounds(adjustedBounds(mainWindow));
-    global.googleChatView.webContents.focus();
-  });
-  ipcMain.on("window.currents", (event) => {
-    mainWindow.setBrowserView(global.googleCurrentsView);
-    global.googleCurrentsView.setBounds(adjustedBounds(mainWindow));
-    global.googleCurrentsView.webContents.focus();
-  });
-  ipcMain.on("window.groups", (event) => {
-    mainWindow.setBrowserView(global.googleGroupsView);
-    global.googleGroupsView.setBounds(adjustedBounds(mainWindow));
-    global.googleGroupsView.webContents.focus();
-  });
-  ipcMain.on("window.calendar", (event) => {
-    mainWindow.setBrowserView(global.googleCalendarView);
-    global.googleCalendarView.setBounds(adjustedBounds(mainWindow));
-    global.googleCalendarView.webContents.focus();
-  });
-
   let handleNavigation = function (event, url, frameName, disposition, options) {
     event.preventDefault();
 
@@ -86,34 +90,185 @@ function createMainWindow() {
     }
 
     if (url.includes("meet.google")) {
-      global.googleMeetView.webContents.loadURL(url);
+      global.googleMeetView.webContents.loadURL(url, {userAgent: userAgent});
       mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
     } else if (url.includes("currents.google")) {
-      global.googleCurrentsView.webContents.loadURL(url);
+      global.googleCurrentsView.webContents.loadURL(url, {userAgent: userAgent});
       mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
     } else if (url.includes("chat.google")) {
-      global.googleChatView.webContents.loadURL(url);
+      global.googleChatView.webContents.loadURL(url, {userAgent: userAgent});
       mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
     } else if (url.includes("groups.google")) {
-      global.googleGroupsView.webContents.loadURL(url);
+      global.googleGroupsView.webContents.loadURL(url, {userAgent: userAgent});
       mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
     } else if (url.includes("calendar.google")) {
-      global.googleCalendarView.webContents.loadURL(url);
+      global.googleCalendarView.webContents.loadURL(url, {userAgent: userAgent});
       mainWindow.webContents.executeJavaScript("document.getElementById('calendar-tab').click();");
-    } else  if (url.includes("notion.so")) {
+    } else if (url.includes("admin.google")) {
+      global.googleAdminView.webContents.loadURL(url, {userAgent: userAgent});
+      mainWindow.webContents.executeJavaScript("document.getElementById('admin-tab').click();");
+    } else if (url.includes("drive.google")) {
+      global.googleDriveView.webContents.loadURL(url, {userAgent: userAgent});
+      mainWindow.webContents.executeJavaScript("document.getElementById('drive-tab').click();");
+    } else if (url.includes("mail.google")) {
+      global.googleMailView.webContents.loadURL(url, {userAgent: userAgent});
+      mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
+    } else if (url.includes("notion.so")) {
       shell.openExternal(url.replace("https://", "notion://"))
-    } else  if (url.includes("zoom.us")) {
+    } else if (url.includes("zoom.us")) {
       shell.openExternal(url.replace("https://", "zoommtg://").replace("/j/", "/start?confno="))
     } else {
       shell.openExternal(url);
     }
   };
 
-  global.googleMeetView.webContents.on("new-window", handleNavigation);
-  global.googleChatView.webContents.on("new-window", handleNavigation);
-  global.googleCurrentsView.webContents.on("new-window", handleNavigation);
-  global.googleGroupsView.webContents.on("new-window", handleNavigation);
-  global.googleCalendarView.webContents.on("new-window", handleNavigation);
+  function setAdminVisibility(){
+    var toAdmin = store.get(USER_PREF_KEYS.SHOW_ADMIN);
+    if (toAdmin == true) {
+      mainWindow.webContents.executeJavaScript("$('#admin-li').removeClass('hidden')");
+    } else {
+      mainWindow.webContents.executeJavaScript("$('#admin-li').addClass('hidden')");
+    }
+  }
+
+  setAdminVisibility();
+  
+  store.onDidChange(USER_PREF_KEYS.SHOW_ADMIN, () => {
+    setAdminVisibility();
+  });
+
+  let handleLoadCommit = function(event) {
+    event.sender.focus();
+  }
+
+
+  const googleAdminView = (global.googleAdminView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleAdminView, GOOGLE_ADMIN_URL, "setting-id")
+  ipcMain.on("window.admin", (event) => {
+    mainWindow.setBrowserView(global.googleAdminView);
+    global.googleAdminView.setBounds(adjustedBounds(mainWindow));
+    global.googleAdminView.webContents.focus();
+  });
+  googleAdminView.webContents.on("new-window", handleNavigation);
+  googleAdminView.webContents.once("dom-ready", handleLoadCommit);
+
+
+
+  const googleGroupsView = (global.googleGroupsView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleGroupsView, GOOGLE_GROUPS_URL, "group-id")
+  ipcMain.on("window.groups", (event) => {
+    mainWindow.setBrowserView(global.googleGroupsView);
+    global.googleGroupsView.setBounds(adjustedBounds(mainWindow));
+    global.googleGroupsView.webContents.focus();
+  });
+  googleGroupsView.webContents.on("new-window", handleNavigation);
+  googleGroupsView.webContents.once("dom-ready", handleLoadCommit);
+
+
+
+  const googleCurrentsView = (global.googleCurrentsView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleCurrentsView, GOOGLE_CURRENTS_URL, "post-id")
+  ipcMain.on("window.currents", (event) => {
+    mainWindow.setBrowserView(global.googleCurrentsView);
+    global.googleCurrentsView.setBounds(adjustedBounds(mainWindow));
+    global.googleCurrentsView.webContents.focus();
+  });
+  googleCurrentsView.webContents.on("new-window", handleNavigation);
+  googleCurrentsView.webContents.once("dom-ready", handleLoadCommit);
+
+
+
+  const googleMailView = (global.googleMailView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleMailView, GOOGLE_MAIL_URL, "mail-id")
+  ipcMain.on("window.mail", (event) => {
+    mainWindow.setBrowserView(global.googleMailView);
+    global.googleMailView.setBounds(adjustedBounds(mainWindow));
+    global.googleMailView.webContents.focus();
+  });
+  googleMailView.webContents.on("new-window", handleNavigation);
+  googleMailView.webContents.once("dom-ready", handleLoadCommit);
+
+
+
+  const googleMeetView = (global.googleMeetView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleMeetView, GOOGLE_MEET_URL, "room-id")
+  ipcMain.on("window.meet", (event) => {
+    mainWindow.setBrowserView(global.googleMeetView);
+    global.googleMeetView.setBounds(adjustedBounds(mainWindow));
+    global.googleMeetView.webContents.focus();
+  });
+  googleMeetView.webContents.on("new-window", handleNavigation);
+  googleMeetView.webContents.once("dom-ready", handleLoadCommit);
+
+
+
+  const googleCalendarView = (global.googleCalendarView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleCalendarView, GOOGLE_CALENDAR_URL, "event-id")
+  ipcMain.on("window.calendar", (event) => {
+    mainWindow.setBrowserView(global.googleCalendarView);
+    global.googleCalendarView.setBounds(adjustedBounds(mainWindow));
+    global.googleCalendarView.webContents.focus();
+  });
+  googleCalendarView.webContents.on("new-window", handleNavigation);
+  googleCalendarView.webContents.once("dom-ready", handleLoadCommit);
+
+
+
+  const googleDriveView = (global.googleDriveView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleDriveView, GOOGLE_DRIVE_URL, "file-id")
+  ipcMain.on("window.drive", (event) => {
+    mainWindow.setBrowserView(global.googleDriveView);
+    global.googleDriveView.setBounds(adjustedBounds(mainWindow));
+    global.googleDriveView.webContents.focus();
+  });
+  googleDriveView.webContents.on("new-window", handleNavigation);
+  googleDriveView.webContents.once("dom-ready", handleLoadCommit);
+
+
+
+  const googleChatView = (global.googleChatView = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  }));
+  createSubView(mainWindow, googleChatView, GOOGLE_CHAT_URL, "room-id")
+  ipcMain.on("window.chat", (event) => {
+    mainWindow.setBrowserView(global.googleChatView);
+    global.googleChatView.setBounds(adjustedBounds(mainWindow));
+    global.googleChatView.webContents.focus();
+  });
+  googleChatView.webContents.on("new-window", handleNavigation);
+  googleChatView.webContents.once("dom-ready", handleLoadCommit);
+
+
 
   mainWindow.on("maximize", () => {
     mainWindow.webContents.send("window.maximized");
@@ -176,183 +331,41 @@ function createMainWindow() {
     app.quit();
   });
 
+  // global.googleChatView.webContents.openDevTools({ detach: true })
+
   return mainWindow;
 }
 
 function setMainMenu() {
-  // Get template for default menu
-  const menuTemplate = defaultMenu(app, shell);
-
-  // Add custom menu
-  menuTemplate[2].submenu.unshift({
-    type: "separator",
-  });
-  menuTemplate[2].submenu.unshift({
-    label: "Admin",
-    type: "checkbox",
-    click: (item, focusedWindow) => {},
-  });
-  menuTemplate[2].submenu.unshift({
-    label: "Groups",
-    type: "checkbox",
-    checked: true,
-    click: (item, focusedWindow) => {},
-  });
-  menuTemplate[2].submenu.unshift({
-    label: "Calendar",
-    type: "checkbox",
-    checked: true,
-    click: (item, focusedWindow) => {},
-  });
-
-  // Set top-level application menu, using modified template
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 }
 
-function createGoogleMeetView(mainWindow) {
-  const googleMeetView = (global.googleMeetView = new BrowserView({
-    webPreferences: {
-      preload: path.join(__dirname, "..", "renderer", "adapters", "polyfill.js"),
-    },
-  }));
+function createSubView(mainWindow, view, url, deeplink) {
 
-  let url = GOOGLE_MEET_URL;
-  if (app.commandLine.hasSwitch("room-id")) {
-    url = GOOGLE_MEET_URL + app.commandLine.getSwitchValue("room-id");
+  if (app.commandLine.hasSwitch(deeplink)) {
+    url = url + app.commandLine.getSwitchValue(deeplink);
   }
 
-  mainWindow.addBrowserView(googleMeetView);
+  mainWindow.addBrowserView(view);
 
-  googleMeetView.webContents.loadURL(url);
-  googleMeetView.setBounds(adjustedBounds(mainWindow));
-  googleMeetView.webContents.on("did-finish-load", () => {
-    googleMeetView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
+  view.webContents.loadURL(url, {userAgent: userAgent});
+  view.setBounds(adjustedBounds(mainWindow));
+  view.webContents.on("did-finish-load", () => {
+    view.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
   });
-  // googleMeetView.webContents.openDevTools();
+  // view.webContents.openDevTools();
 
   mainWindow.on("resize", () => {
-    googleMeetView.setBounds(adjustedBounds(mainWindow));
+    view.setBounds(adjustedBounds(mainWindow));
   });
 
   ipcMain.on("window.home", () => {
-    googleMeetView.webContents.loadURL(GOOGLE_MEET_URL);
+    view.webContents.loadURL(url, {userAgent: userAgent});
   });
 
   ipcMain.on("screenshare.stop", () => {
-    googleMeetView.webContents.send("screenshare.stop");
-  });
-}
-
-function createGoogleChatView(mainWindow) {
-  const googleChatView = (global.googleChatView = new BrowserView({
-    webPreferences: {
-      preload: path.join(__dirname, "..", "renderer", "adapters", "polyfill.js"),
-    },
-  }));
-
-  let url = GOOGLE_CHAT_URL;
-  if (app.commandLine.hasSwitch("room-id")) {
-    url = GOOGLE_CHAT_URL + app.commandLine.getSwitchValue("room-id");
-  }
-
-  mainWindow.addBrowserView(googleChatView);
-
-  googleChatView.webContents.loadURL(url);
-  googleChatView.setBounds(adjustedBounds(mainWindow));
-  googleChatView.webContents.on("did-finish-load", () => {
-    googleChatView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
-  });
-  // googleChatView.webContents.openDevTools();
-
-  mainWindow.on("resize", () => {
-    googleChatView.setBounds(adjustedBounds(mainWindow));
-  });
-
-  ipcMain.on("window.home", () => {
-    googleChatView.webContents.loadURL(GOOGLE_CHAT_URL);
-  });
-}
-
-function createGoogleCalendarView(mainWindow) {
-  const googleCalendarView = (global.googleCalendarView = new BrowserView({
-    webPreferences: {
-      preload: path.join(__dirname, "..", "renderer", "adapters", "polyfill.js"),
-    },
-  }));
-  let url = GOOGLE_CALENDAR_URL;
-  mainWindow.addBrowserView(googleCalendarView);
-  googleCalendarView.webContents.loadURL(url);
-  googleCalendarView.setBounds(adjustedBounds(mainWindow));
-  googleCalendarView.webContents.on("did-finish-load", () => {
-    googleCalendarView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
-  });
-
-  mainWindow.on("resize", () => {
-    googleCalendarView.setBounds(adjustedBounds(mainWindow));
-  });
-
-  ipcMain.on("window.home", () => {
-    googleCalendarView.webContents.loadURL(GOOGLE_CURRENTS_URL);
-  });
-}
-
-function createGoogleCurrentsView(mainWindow) {
-  const googleCurrentsView = (global.googleCurrentsView = new BrowserView({
-    webPreferences: {
-      preload: path.join(__dirname, "..", "renderer", "adapters", "polyfill.js"),
-    },
-  }));
-
-  let url = GOOGLE_CURRENTS_URL;
-  if (app.commandLine.hasSwitch("post-id")) {
-    url = GOOGLE_CURRENTS_URL + app.commandLine.getSwitchValue("post-id");
-  }
-
-  mainWindow.addBrowserView(googleCurrentsView);
-
-  googleCurrentsView.webContents.loadURL(url);
-  googleCurrentsView.setBounds(adjustedBounds(mainWindow));
-  googleCurrentsView.webContents.on("did-finish-load", () => {
-    googleCurrentsView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
-  });
-  // googleCurrentsView.webContents.openDevTools();
-
-  mainWindow.on("resize", () => {
-    googleCurrentsView.setBounds(adjustedBounds(mainWindow));
-  });
-
-  ipcMain.on("window.home", () => {
-    googleCurrentsView.webContents.loadURL(GOOGLE_CURRENTS_URL);
-  });
-}
-
-function createGoogleGroupsView(mainWindow) {
-  const googleGroupsView = (global.googleGroupsView = new BrowserView({
-    webPreferences: {
-      preload: path.join(__dirname, "..", "renderer", "adapters", "polyfill.js"),
-    },
-  }));
-
-  let url = GOOGLE_GROUPS_URL;
-  if (app.commandLine.hasSwitch("group-id")) {
-    url = GOOGLE_GROUPS_URL + app.commandLine.getSwitchValue("group-id");
-  }
-
-  mainWindow.addBrowserView(googleGroupsView);
-
-  googleGroupsView.webContents.loadURL(url);
-  googleGroupsView.setBounds(adjustedBounds(mainWindow));
-  googleGroupsView.webContents.on("did-finish-load", () => {
-    googleGroupsView.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
-  });
-  // googleGroupsView.webContents.openDevTools();
-
-  mainWindow.on("resize", () => {
-    googleGroupsView.setBounds(adjustedBounds(mainWindow));
-  });
-
-  ipcMain.on("window.home", () => {
-    googleGroupsView.webContents.loadURL(GOOGLE_GROUPS_URL);
+    view.webContents.send("screenshare.stop");
   });
 }
 
@@ -376,7 +389,7 @@ function createCanvasWindow() {
     frame: false,
     webPreferences: {
       contextIsolation: true,
-      preload: path.join(__dirname, "..", "renderer", "preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
     focusable: false,
     show: false,
@@ -403,7 +416,7 @@ function createScreenToolsWindow() {
     transparent: true,
     webPreferences: {
       contextIsolation: true,
-      preload: path.join(__dirname, "..", "renderer", "preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
