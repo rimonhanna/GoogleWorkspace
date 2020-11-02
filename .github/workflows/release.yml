@@ -37,7 +37,7 @@ jobs:
         run: npm install
       
       - name: Prepare for app notarization
-         run: |
+        run: |
             mkdir -p ~/private_keys/
             echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
