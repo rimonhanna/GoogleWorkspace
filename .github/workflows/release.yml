@@ -35,11 +35,30 @@ jobs:
 
       - name: Install dependancies
         run: npm install
+      
+      - name: Prepare for app notarization
+         run: |
+            mkdir -p ~/private_keys/
+            echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
-      - name: Build project
-        run: npm run dist
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          mac_certs: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
+
+
+          # mac_certs_password: ${{ secrets.mac_certs_password }}
+
+
+
+      # - name: Build project
+      #   run: npm run dist
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get package version
         run: |

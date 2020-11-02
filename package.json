@@ -21,7 +21,8 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^8.5.2",
-    "electron-builder": "^22.8.0"
+    "electron-builder": "^22.8.0",
+    "electron-builder-notarize": "^1.2.0"
   },
   "dependencies": {
     "about-window": "^1.13.4",
@@ -39,7 +40,9 @@
   "build": {
     "appId": "com.rimonhanna.googleWorkspace",
     "productName": "Google Workspace",
+    "afterSign": "electron-builder-notarize",
     "mac": {
+      "hardenedRuntime": true,
       "extendInfo": {
         "NSCameraUsageDescription": "This app requires camera access for video call in Google Meet.",
         "NSMicrophoneUsageDescription": "This app requires microphone access for audio call in Google Meet."
