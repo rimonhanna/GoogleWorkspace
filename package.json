@@ -1,7 +1,7 @@
 {
   "name": "google-workspace",
   "productName": "Google Workspace",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "An unofficial desktop app for Google Workspace",
   "main": "./src/index.js",
   "scripts": {
