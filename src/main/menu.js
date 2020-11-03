@@ -12,7 +12,7 @@ const {
 const about = () => {
   openAboutWindow({
     product_name: appInfo.productName,
-    icon_path: `${__dirname}/../../build/icon.png`,
+    icon_path: `../../build/icon.png`,
     copyright: appInfo.copyright,
     package_json_dir: `${__dirname}/../../`,
     bug_report_url: appInfo.repository.report,
