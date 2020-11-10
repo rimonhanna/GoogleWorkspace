@@ -1,7 +1,7 @@
 {
   "name": "google-workspace",
   "productName": "Google Workspace",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "An unofficial desktop app for Google Workspace",
   "main": "./src/index.js",
   "scripts": {
@@ -27,8 +27,8 @@
   "dependencies": {
     "about-window": "^1.13.4",
     "darkreader": "^4.9.22",
-    "electron-context-menu": "^2.3.0",
     "electron-default-menu": "^1.0.2",
+    "electron-editor-context-menu": "^1.1.1",
     "electron-is-dev": "^1.2.0",
     "electron-localshortcut": "^3.2.1",
     "electron-settings": "^4.0.2",
