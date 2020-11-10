@@ -336,6 +336,26 @@ function createMainWindow() {
   return mainWindow;
 }
 
+
+function addContextMenuItems(params) {
+  var contextMenu = buildEditorContextMenu();
+  contextMenu.append(new MenuItem({
+    label: `Search Google for "${params.selectionText.substr(0,15) + (params.selectionText.trim().length > 15? "...": "")}"`,
+    visible: params.selectionText.trim().length > 0,
+    click: () => {
+      shell.openExternal(`https://google.com/search?q=${encodeURIComponent(params.selectionText)}`);
+    },
+  }));
+  contextMenu.append(new MenuItem({ type: "separator" }));
+  contextMenu.append(new MenuItem({
+    label: "Inspect Element",
+    click: () => {
+      mainWindow.getBrowserView().webContents.inspectElement(rightClickPosition.x, rightClickPosition.y);
+    },
+  }));
+  return contextMenu;
+}
+
 function setMainMenu() {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
