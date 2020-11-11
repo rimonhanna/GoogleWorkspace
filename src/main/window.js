@@ -324,7 +324,7 @@ function createMainWindow() {
 function addContextMenuItems(params) {
   var contextMenu = buildEditorContextMenu();
   contextMenu.append(new MenuItem({
-    label: `Search Google for "${params.selectionText.substr(0,15) + (params.selectionText.trim().length > 15? "...": "")}"`,
+    label: `Search Google for "${params.selectionText.substr(0,15).trim() + (params.selectionText.length > 15? "...": "")}"`,
     visible: params.selectionText.trim().length > 0,
     click: () => {
       shell.openExternal(`https://google.com/search?q=${encodeURIComponent(params.selectionText)}`);
