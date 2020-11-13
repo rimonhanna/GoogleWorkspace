@@ -41,7 +41,7 @@ function createMainWindow() {
     defaultWidth: 1280,
     defaultHeight: 800,
     fullScreen: false,
-    maximize: true,
+    restore: true
   });
 
   const mainWindow = (global.mainWindow = new BrowserWindow({
@@ -70,8 +70,6 @@ function createMainWindow() {
       mainWindow.webContents.send("window.maximized");
     }
   });
-
-  mainWindow.maximize();
 
   let handleNavigation = function (event, url, frameName, disposition, options) {
     event.preventDefault();
