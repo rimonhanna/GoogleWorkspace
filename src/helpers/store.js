@@ -14,6 +14,22 @@ const schema = {
     type: "boolean",
     default: false,
   },
+  showGroups: {
+    type: "boolean",
+    default: true,
+  },
+  showDrive: {
+    type: "boolean",
+    default: true,
+  },
+  showCalendar: {
+    type: "boolean",
+    default: true,
+  },
+  showMail: {
+    type: "boolean",
+    default: true,
+  },
 };
 
 module.exports = new Store({ schema });

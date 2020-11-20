@@ -31,6 +31,30 @@ const toggleAdminView = () => {
   store.set(USER_PREF_KEYS.SHOW_ADMIN, currentAdmin);
 }
 
+const toggleGroupsView = () => {
+  var currentBoolean = store.get(USER_PREF_KEYS.SHOW_GROUPS);
+  currentBoolean = currentBoolean == true? false: true;
+  store.set(USER_PREF_KEYS.SHOW_GROUPS, currentBoolean);
+}
+
+const toggleDriveView = () => {
+  var currentBoolean = store.get(USER_PREF_KEYS.SHOW_DRIVE);
+  currentBoolean = currentBoolean == true? false: true;
+  store.set(USER_PREF_KEYS.SHOW_DRIVE, currentBoolean);
+}
+
+const toggleMailView = () => {
+  var currentBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
+  currentBoolean = currentBoolean == true? false: true;
+  store.set(USER_PREF_KEYS.SHOW_MAIL, currentBoolean);
+}
+
+const toggleCalendarView = () => {
+  var currentBoolean = store.get(USER_PREF_KEYS.SHOW_CALENDAR);
+  currentBoolean = currentBoolean == true? false: true;
+  store.set(USER_PREF_KEYS.SHOW_CALENDAR, currentBoolean);
+}
+
 const toggleDarkMode = () => {
   // Code can probably be a lot cleaner than this.
   const currentTheme = store.get(USER_PREF_KEYS.THEME);
@@ -112,30 +136,30 @@ const template = [
         checked: store.get(USER_PREF_KEYS.SHOW_ADMIN),
         click: toggleAdminView,
       },
-      // {
-      //   label: "Groups",
-      //   type: "checkbox",
-      //   checked: true,
-      //   click: (item, focusedWindow) => {},
-      // },
-      // {
-      //   label: "Mail",
-      //   type: "checkbox",
-      //   checked: true,
-      //   click: (item, focusedWindow) => {},
-      // },
-      // {
-      //   label: "Calendar",
-      //   type: "checkbox",
-      //   checked: true,
-      //   click: (item, focusedWindow) => {},
-      // },
-      // {
-      //   label: "Drive",
-      //   type: "checkbox",
-      //   checked: true,
-      //   click: (item, focusedWindow) => {},
-      // }
+      {
+        label: "Groups",
+        type: "checkbox",
+        checked: store.get(USER_PREF_KEYS.SHOW_GROUPS),
+        click: toggleGroupsView,
+      },
+      {
+        label: "Mail",
+        type: "checkbox",
+        checked: store.get(USER_PREF_KEYS.SHOW_MAIL),
+        click: toggleMailView,
+      },
+      {
+        label: "Calendar",
+        type: "checkbox",
+        checked: store.get(USER_PREF_KEYS.SHOW_CALENDAR),
+        click: toggleCalendarView,
+      },
+      {
+        label: "Drive",
+        type: "checkbox",
+        checked: store.get(USER_PREF_KEYS.SHOW_DRIVE),
+        click: toggleDriveView,
+      }
     ],
   },
   {

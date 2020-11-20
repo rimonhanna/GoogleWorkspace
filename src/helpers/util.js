@@ -22,6 +22,10 @@ const CONSTANTS = {
     THEME: "theme",
     EXTERNAL_LINKS: "openLinksInBrowser",
     SHOW_ADMIN: "showAdmin",
+    SHOW_GROUPS: "showGroups",
+    SHOW_MAIL: "showMail",
+    SHOW_DRIVE: "showDrive",
+    SHOW_CALENDAR: "showCalendar",
   },
 };
 

@@ -113,18 +113,74 @@ function createMainWindow() {
   };
 
   function setAdminVisibility() {
-    var toAdmin = store.get(USER_PREF_KEYS.SHOW_ADMIN);
-    if (toAdmin == true) {
+    var toBoolean = store.get(USER_PREF_KEYS.SHOW_ADMIN);
+    if (toBoolean == true) {
       mainWindow.webContents.executeJavaScript("$('#admin-li').removeClass('hidden')");
     } else {
       mainWindow.webContents.executeJavaScript("$('#admin-li').addClass('hidden')");
     }
   }
 
+  function setGroupsVisibility() {
+    var toBoolean = store.get(USER_PREF_KEYS.SHOW_GROUPS);
+    if (toBoolean == true) {
+      mainWindow.webContents.executeJavaScript("$('#groups-li').removeClass('hidden')");
+    } else {
+      mainWindow.webContents.executeJavaScript("$('#groups-li').addClass('hidden')");
+    }
+  }
+
+  function setDriveVisibility() {
+    var toBoolean = store.get(USER_PREF_KEYS.SHOW_DRIVE);
+    if (toBoolean == true) {
+      mainWindow.webContents.executeJavaScript("$('#drive-li').removeClass('hidden')");
+    } else {
+      mainWindow.webContents.executeJavaScript("$('#drive-li').addClass('hidden')");
+    }
+  }
+
+  function setMailVisibility() {
+    var toBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
+    if (toBoolean == true) {
+      mainWindow.webContents.executeJavaScript("$('#mail-li').removeClass('hidden')");
+    } else {
+      mainWindow.webContents.executeJavaScript("$('#mail-li').addClass('hidden')");
+    }
+  }
+
+  function setCalendarVisibility() {
+    var toBoolean = store.get(USER_PREF_KEYS.SHOW_CALENDAR);
+    if (toBoolean == true) {
+      mainWindow.webContents.executeJavaScript("$('#calendar-li').removeClass('hidden')");
+    } else {
+      mainWindow.webContents.executeJavaScript("$('#calendar-li').addClass('hidden')");
+    }
+  }
+
   setAdminVisibility();
+  setGroupsVisibility();
+  setDriveVisibility();
+  setMailVisibility();
+  setCalendarVisibility();
 
   store.onDidChange(USER_PREF_KEYS.SHOW_ADMIN, () => {
     setAdminVisibility();
+  });
+
+  store.onDidChange(USER_PREF_KEYS.SHOW_GROUPS, () => {
+    setGroupsVisibility();
+  });
+
+  store.onDidChange(USER_PREF_KEYS.SHOW_DRIVE, () => {
+    setDriveVisibility();
+  });
+
+  store.onDidChange(USER_PREF_KEYS.SHOW_MAIL, () => {
+    setMailVisibility();
+  });
+
+  store.onDidChange(USER_PREF_KEYS.SHOW_CALENDAR, () => {
+    setCalendarVisibility();
   });
 
   let handleLoadCommit = function (event) {
@@ -300,6 +356,30 @@ function createMainWindow() {
   });
 
   ipcMain.on("window.canvas.hide", () => {
+    canvasWindow.hide();
+    canvasWindow.reload();
+  });
+
+  // let mediaRecorder; // MediaRecorder instance to capture footage
+  ipcMain.on("window.screenrecord.start", () => {
+    screenToolsWindow.show();
+
+    // Create the Media Recorder
+    // const options = { mimeType: 'video/webm; codecs=vp9' };
+    // mediaRecorder = new MediaRecorder(stream, options);
+  });
+
+  ipcMain.on("window.screenrecord.stop", () => {
+    screenToolsWindow.hide();
+    screenToolsWindow.reload();
+    canvasWindow.hide();
+  });
+
+  ipcMain.on("window.screenrecord.show", () => {
+    canvasWindow.show();
+  });
+
+  ipcMain.on("window.screenrecord.hide", () => {
     canvasWindow.hide();
     canvasWindow.reload();
   });
