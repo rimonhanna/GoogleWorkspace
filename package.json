@@ -42,7 +42,6 @@
     "productName": "Google Workspace",
     "afterSign": "electron-builder-notarize",
     "mac": {
-      "sign": true,
       "publish": ["github"],
       "hardenedRuntime": true,
       "extendInfo": {
