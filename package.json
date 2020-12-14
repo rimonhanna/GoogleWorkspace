@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder -p always"
   },
   "repository": "https://github.com/rimonhanna/GoogleWorkspace",
   "keywords": [
@@ -42,6 +42,8 @@
     "productName": "Google Workspace",
     "afterSign": "electron-builder-notarize",
     "mac": {
+      "sign": true,
+      "publish": ["github"],
       "hardenedRuntime": true,
       "extendInfo": {
         "NSCameraUsageDescription": "This app requires camera access for video call in Google Meet.",
