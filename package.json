@@ -1,7 +1,7 @@
 {
   "name": "google-workspace",
   "productName": "Google Workspace",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "description": "An unofficial desktop app for Google Workspace",
   "main": "./src/index.js",
   "scripts": {
@@ -42,7 +42,9 @@
     "productName": "Google Workspace",
     "afterSign": "electron-builder-notarize",
     "mac": {
-      "publish": ["github"],
+      "publish": [
+        "github"
+      ],
       "hardenedRuntime": true,
       "extendInfo": {
         "NSCameraUsageDescription": "This app requires camera access for video call in Google Meet.",
