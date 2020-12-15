@@ -152,7 +152,7 @@ module.exports = async params => {
 	await notarize(notarizeOptions);
     console.log(`Done notarizing ${appId}`);
     
-    const dmgPath = context.artifactPaths.find(p => p.endsWith(".dmg"));
+    const dmgPath = params.artifactPaths.find(p => p.endsWith(".dmg"));
     if(!dmgPath) {
         throw new Error('`dmg` was not found');
     }
