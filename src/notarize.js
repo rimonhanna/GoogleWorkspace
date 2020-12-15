@@ -7,7 +7,7 @@ const readPkgUp = require('read-pkg-up');
 // eslint-disable-next-line import/no-unresolved
 const util = require('builder-util');
 const { notarize } = require('electron-notarize');
-const { notarizeDmg } = require("electron-notarize-dmg");
+const { notarize: notarizeDmg } = require("electron-notarize-dmg");
 const glob = require('glob');
 
 
@@ -155,7 +155,7 @@ module.exports = async params => {
     console.log(`Done notarizing ${appId}`);
 
 
-    const dmgPath = await glob('./**/*.dmg', {})
+    const dmgPath = await glob('../**/*.dmg', {})[0]
 	console.log(`dmg found at ${dmgPath}`);
     if(!dmgPath) {
         throw new Error('`dmg` was not found');
