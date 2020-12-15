@@ -1,0 +1,3 @@
+-P macos-latest=nektos/act-environments-ubuntu:18.04
+-v
+-e .act.json

@@ -45,7 +45,6 @@
     "appId": "com.rimonhanna.googleWorkspace",
     "productName": "Google Workspace",
     "afterSign": "./src/notarize",
-    "afterAllArtifactBuild": "./src/notarize",
     "mac": {
       "publish": [
         {

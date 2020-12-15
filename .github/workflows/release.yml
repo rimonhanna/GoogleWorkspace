@@ -42,6 +42,7 @@ jobs:
             echo '${{ secrets.APPLE_API_KEY }}' > ~/private_keys/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
 
       - name: Get package version
+        id: package_version
         run: |
           PACKAGE_VERSION=$(cat package.json \
             | grep version \
@@ -50,23 +51,23 @@ jobs:
             | sed 's/[",]//g' \
             | tr -d '[[:space:]]')
           echo "$PACKAGE_VERSION"
-          echo "PACKAGE_VERSION=$(echo $PACKAGE_VERSION)" >> $GITHUB_ENV
+          echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
 
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: v${{ env.PACKAGE_VERSION }}
-          draft: true
+      # - name: Create Release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: v${{ steps.package_version.outputs.PACKAGE_VERSION }}
+      #     release_name: v${{ steps.package_version.outputs.PACKAGE_VERSION }}
+      #     draft: false
 
       - name: Build/release Electron app
         run: |
           npm run dist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_LINK: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
+          CSC_LINK: ./build/Mac_Certificates.p12
           CSC_KEY_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
