@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder -p always"
   },
   "repository": "https://github.com/rimonhanna/GoogleWorkspace",
   "keywords": [
