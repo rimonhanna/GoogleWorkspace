@@ -53,8 +53,14 @@ jobs:
           echo "$PACKAGE_VERSION"
           echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
 
+      - uses: apple-actions/import-codesign-certs@v1
+        with: 
+          p12-file-base64: ./build/Mac_Certificates.p12
+          p12-password: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
+
       - name: Build/release Electron app
         run: |
+          ls ./build
           chmod +x ./dist.sh
           ./dist.sh
         env:
