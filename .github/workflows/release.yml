@@ -65,7 +65,6 @@ jobs:
           ./dist.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_LINK: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
           CSC_KEY_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
