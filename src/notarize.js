@@ -182,8 +182,12 @@ module.exports = async params => {
     var dmgPath = dmgPathArray.join('/')
 
     dmgPath = path.join(dmgPath, `${params.packager.appInfo.productFilename}-${appVersion}.dmg`);
-	console.log(`dmg found at ${dmgPath}`);
-    if(!dmgPath) {
+	try {
+        if (!fs.existsSync(dmgPath)) {
+            console.log('`dmg` was not found');
+            return;
+        }
+    } catch(err) {
         console.log('`dmg` was not found');
         return;
     }
