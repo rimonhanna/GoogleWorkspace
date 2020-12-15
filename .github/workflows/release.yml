@@ -53,10 +53,11 @@ jobs:
           echo "$PACKAGE_VERSION"
           echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
 
-      - uses: apple-actions/import-codesign-certs@v1
-        with: 
-          p12-filepath: ./build/Mac_Certificates.p12
-          p12-password: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
+      - name: Add MacOS certs
+        run: chmod +x add-osx-cert.sh && ./add-osx-cert.sh
+        env:
+          CERTIFICATE_OSX_APPLICATION: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
 
       - name: Build/release Electron app
         run: |
@@ -64,7 +65,7 @@ jobs:
           ./dist.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_LINK: ./build/Mac_Certificates.p12
+          CSC_LINK: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
           CSC_KEY_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
