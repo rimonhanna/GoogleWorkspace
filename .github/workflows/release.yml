@@ -59,29 +59,19 @@ jobs:
           CERTIFICATE_OSX_APPLICATION: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
 
-      # - name: Build/release Electron app
-      #   run: |
-      #     chmod +x ./dist.sh
-      #     ./dist.sh
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     CSC_KEY_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
-      #     API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-      #     API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
       - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
+        uses: samuelmeuli/action-electron-builder@v1.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           mac_certs: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
           mac_certs_password: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
           release: true
         env:
-          # macOS notarization API key
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
 
       - name: "Commit updated package.json to repo"
-        uses: stefanzweifel/git-auto-commit-action@v4.4.0
+        uses: stefanzweifel/git-auto-commit-action@v4.8.0
         with:
           commit_message: "Created new package version"
           file_pattern: ./package*.json
