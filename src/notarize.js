@@ -7,7 +7,6 @@ const readPkgUp = require('read-pkg-up');
 // eslint-disable-next-line import/no-unresolved
 const util = require('builder-util');
 const { notarize } = require('electron-notarize');
-const { notarize: notarizeDmg } = require("electron-notarize-dmg");
 
 /**
  * Validates and returns authentication-related environment variables
@@ -93,23 +92,6 @@ const getAppId = params => {
 	return (packageJson.build && packageJson.build.appId) || process.env.APP_ID;
 };
 
-
-const getAppVersion = params => {
-	const {packager, outDir} = params;
-
-	// Try getting version from the packager object
-	const config = packager.info._configuration;
-	const version = config && config.version;
-
-	if (version) {
-		return version;
-	}
-
-	// Try getting version from `package.json` or from an env var
-	const {packageJson} = readPkgUp.sync();
-	return (packageJson.version) || process.env.VERSION;
-};
-
 module.exports = async params => {
 	if (params.electronPlatformName !== 'darwin') {
 		return;
@@ -170,41 +152,4 @@ module.exports = async params => {
 	console.log(`Notarizing ${appId} found at ${appPath}`);
 	await notarize(notarizeOptions);
     console.log(`Done notarizing ${appId}`);
-
-    const appVersion = getAppVersion(params);
-
-	if (!appVersion) {
-		throw new Error('`appVersion` was not found');
-	}
-
-    var dmgPathArray = params.appOutDir.split('/');
-    dmgPathArray.pop();
-    var dmgPath = dmgPathArray.join('/')
-
-    dmgPath = path.join(dmgPath, `${params.packager.appInfo.productFilename}-${appVersion}.dmg`);
-	try {
-        if (!fs.existsSync(dmgPath)) {
-            console.log('`dmg` was not found');
-            return;
-        }
-    } catch(err) {
-        console.log('`dmg` was not found');
-        return;
-    }
-
-    const dmgNotarizeOptions = {appBundleId: appId, dmgPath};
-	if (authInfo.appleId) {
-		dmgNotarizeOptions.appleId = authInfo.appleId;
-		dmgNotarizeOptions.appleIdPassword = authInfo.appleIdPassword;
-	} else {
-		dmgNotarizeOptions.appleApiKey = authInfo.appleApiKey;
-		dmgNotarizeOptions.appleApiIssuer = authInfo.appleApiIssuer;
-	}
-
-	if (authInfo.teamShortName) {
-		dmgNotarizeOptions.ascProvider = authInfo.teamShortName;
-    }
-    
-	console.log(`Notarizing ${appId} dmg found at ${dmgPath}`);
-    return await notarizeDmg(dmgNotarizeOptions);
 };

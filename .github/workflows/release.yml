@@ -53,15 +53,6 @@ jobs:
           echo "$PACKAGE_VERSION"
           echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
 
-      # - name: Create Release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: v${{ steps.package_version.outputs.PACKAGE_VERSION }}
-      #     release_name: v${{ steps.package_version.outputs.PACKAGE_VERSION }}
-      #     draft: false
-
       - name: Build/release Electron app
         run: |
           chmod +x ./dist.sh
