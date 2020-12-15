@@ -181,18 +181,11 @@ module.exports = async params => {
     dmgPathArray.pop();
     var dmgPath = dmgPathArray.join('/')
 
-    fs.readdirSync(params.appOutDir).forEach(file => {
-        console.log(file);
-    });
-
-    fs.readdirSync(dmgPath).forEach(file => {
-        console.log(file);
-    });
-
     dmgPath = path.join(dmgPath, `${params.packager.appInfo.productFilename}-${appVersion}.dmg`);
 	console.log(`dmg found at ${dmgPath}`);
     if(!dmgPath) {
-        throw new Error('`dmg` was not found');
+        console.log('`dmg` was not found');
+        return;
     }
 
     const dmgNotarizeOptions = {appBundleId: appId, dmgPath};
