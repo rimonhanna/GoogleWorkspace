@@ -64,14 +64,8 @@ jobs:
 
       - name: Build/release Electron app
         run: |
-          dist() {
-            npm run dist
-            if [ "$?" = "1" ];
-            then
-              dist;
-            fi
-          }
-          dist;
+          chmod +x ./dist.sh
+          ./dist.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_LINK: ./build/Mac_Certificates.p12
