@@ -20,7 +20,8 @@ const getAuthInfo = () => {
 		APPLE_ID_PASSWORD: appleIdPassword,
 		API_KEY_ID: appleApiKey,
 		API_KEY_ISSUER_ID: appleApiIssuer,
-		TEAM_SHORT_NAME: teamShortName
+        TEAM_SHORT_NAME: teamShortName,
+        VERSION: appVersion
 	} = process.env;
 
 	if (!appleId && !appleIdPassword && !appleApiKey && !appleApiIssuer) {
@@ -53,7 +54,8 @@ const getAuthInfo = () => {
 		appleIdPassword,
 		appleApiKey,
 		appleApiIssuer,
-		teamShortName
+        teamShortName,
+        appVersion
 	};
 };
 
@@ -89,6 +91,23 @@ const getAppId = params => {
 	// Try getting appId from `package.json` or from an env var
 	const {packageJson} = readPkgUp.sync();
 	return (packageJson.build && packageJson.build.appId) || process.env.APP_ID;
+};
+
+
+const getAppVersion = params => {
+	const {packager, outDir} = params;
+
+	// Try getting version from the packager object
+	const config = packager.info._configuration;
+	const version = config && config.version;
+
+	if (version) {
+		return version;
+	}
+
+	// Try getting version from `package.json` or from an env var
+	const {packageJson} = readPkgUp.sync();
+	return (packageJson.version) || process.env.VERSION;
 };
 
 module.exports = async params => {
@@ -152,12 +171,17 @@ module.exports = async params => {
 	await notarize(notarizeOptions);
     console.log(`Done notarizing ${appId}`);
 
+    const appVersion = getAppVersion(params);
+
+	if (!appVersion) {
+		throw new Error('`appVersion` was not found');
+	}
 
     var dmgPathArray = params.appOutDir.split('/');
     dmgPathArray.pop();
     var dmgPath = dmgPathArray.join('/')
 
-    dmgPath = path.join(dmgPath, `${params.packager.appInfo.productFilename}.dmg`);
+    dmgPath = path.join(dmgPath, `${params.packager.appInfo.productFilename}-${appVersion}.dmg`);
 	console.log(`dmg found at ${dmgPath}`);
     if(!dmgPath) {
         throw new Error('`dmg` was not found');
