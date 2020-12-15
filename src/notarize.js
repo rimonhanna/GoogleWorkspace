@@ -153,7 +153,7 @@ module.exports = async params => {
 	console.log(`Notarizing ${appId} found at ${appPath}`);
 	await notarize(notarizeOptions);
     console.log(`Done notarizing ${appId}`);
-    const dmgPath = await glob(__dirname + '/**/*.dmg', {})[0]
+    const dmgPath = await glob('./**/*.dmg', {})
     if(!dmgPath) {
         throw new Error('`dmg` was not found');
     }
