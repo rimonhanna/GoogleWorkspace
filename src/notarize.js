@@ -177,11 +177,7 @@ module.exports = async params => {
 		throw new Error('`appVersion` was not found');
 	}
 
-    var dmgPathArray = params.appOutDir.split('/');
-    dmgPathArray.pop();
-    var dmgPath = dmgPathArray.join('/')
-
-    dmgPath = path.join(dmgPath, `${params.packager.appInfo.productFilename}-${appVersion}.dmg`);
+    const dmgPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}-${appVersion}.dmg`);
 	console.log(`dmg found at ${dmgPath}`);
     if(!dmgPath) {
         throw new Error('`dmg` was not found');
