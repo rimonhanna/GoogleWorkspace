@@ -177,6 +177,18 @@ module.exports = async params => {
 		throw new Error('`appVersion` was not found');
 	}
 
+    var dmgPathArray = params.appOutDir.split('/');
+    dmgPathArray.pop();
+    var dmgPath = dmgPathArray.join('/')
+
+    fs.readdirSync(params.appOutDir).forEach(file => {
+        console.log(file);
+    });
+
+    fs.readdirSync(dmgPath).forEach(file => {
+        console.log(file);
+    });
+
     const dmgPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}-${appVersion}.dmg`);
 	console.log(`dmg found at ${dmgPath}`);
     if(!dmgPath) {
