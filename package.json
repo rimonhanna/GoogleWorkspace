@@ -48,7 +48,10 @@
     "afterAllArtifactBuild": "./src/notarize",
     "mac": {
       "publish": [
-        "github"
+        {
+          "provider": "github",
+          "releaseType": "release"
+        }
       ],
       "hardenedRuntime": true,
       "provisioningProfile": "./build/Google_Workspace.provisionprofile",
