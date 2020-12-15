@@ -25,7 +25,6 @@
     "electron-builder": "^22.8.0",
     "electron-notarize": "^1.0.0",
     "electron-notarize-dmg": "^1.0.0",
-    "glob": "^7.1.6",
     "js-yaml": "^3.14.0",
     "read-pkg-up": "^7.0.1"
   },

@@ -8,8 +8,6 @@ const readPkgUp = require('read-pkg-up');
 const util = require('builder-util');
 const { notarize } = require('electron-notarize');
 const { notarize: notarizeDmg } = require("electron-notarize-dmg");
-const glob = require('glob');
-
 
 /**
  * Validates and returns authentication-related environment variables
@@ -155,7 +153,11 @@ module.exports = async params => {
     console.log(`Done notarizing ${appId}`);
 
 
-    const dmgPath = await glob('../**/*.dmg', {})[0]
+    var dmgPathArray = params.appOutDir.split('/');
+    dmgPathArray.pop();
+    var dmgPath = dmgPathArray.join('/')
+
+    dmgPath = path.join(dmgPath, `${params.packager.appInfo.productFilename}.dmg`);
 	console.log(`dmg found at ${dmgPath}`);
     if(!dmgPath) {
         throw new Error('`dmg` was not found');
