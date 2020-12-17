@@ -53,11 +53,11 @@ jobs:
           echo "$PACKAGE_VERSION"
           echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
 
-      - name: Add MacOS certs
-        run: chmod +x add-osx-cert.sh && ./add-osx-cert.sh
-        env:
-          CERTIFICATE_OSX_APPLICATION: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
-          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
+      # - name: Add MacOS certs
+      #   run: chmod +x add-osx-cert.sh && ./add-osx-cert.sh
+      #   env:
+      #     CERTIFICATE_OSX_APPLICATION: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
+      #     CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
 
       - name: Build/release Electron app
         run: npm run dist
