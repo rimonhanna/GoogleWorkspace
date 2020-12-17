@@ -44,6 +44,7 @@
   "build": {
     "appId": "com.rimonhanna.googleWorkspace",
     "productName": "Google Workspace",
+    "afterSign": "./src/notarize",
     "mac": {
       "target": ["pkg"],
       "publish": [
@@ -53,7 +54,6 @@
         }
       ],
       "hardenedRuntime": true,
-      "afterSign": "./src/notarize",
       "entitlements": "./build/entitlements.mac.plist",
       "provisioningProfile": "./build/Google_Workspace.provisionprofile",
       "extendInfo": {
