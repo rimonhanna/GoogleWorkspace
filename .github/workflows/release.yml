@@ -60,7 +60,7 @@ jobs:
       #     CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
 
       - name: Build/release Electron app
-        run: npm run dist
+        run: npm run publish
         env:
           # macOS Code signing certificates
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
