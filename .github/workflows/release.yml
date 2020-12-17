@@ -60,13 +60,14 @@ jobs:
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
 
       - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          mac_certs: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
-          mac_certs_password: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
-          release: true
+        run: npm run dist
         env:
+          # macOS Code signing certificates
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
+          CSC_KEY_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
+
+          # macOS notarization API key
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
 
