@@ -75,6 +75,22 @@ const getAppId = (params) => {
   return (packageJson.build && packageJson.build.appId) || process.env.APP_ID;
 };
 
+const getAppVersion = (params) => {
+  const { packager } = params;
+
+  // Try getting version from the packager object
+  const config = packager.info._configuration;
+  const version = config && config.version;
+
+  if (version) {
+    return version;
+  }
+
+  // Try getting version from `package.json` or from an env var
+  const { packageJson } = readPkgUp.sync();
+  return packageJson.version || process.env.VERSION;
+};
+
 module.exports = async (params) => {
   if (params.electronPlatformName !== "darwin") {
     return;
@@ -108,13 +124,28 @@ module.exports = async (params) => {
     throw new Error("`appId` was not found");
   }
 
-  const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
+  const appVersion = getAppVersion(params);
 
-  if (!appPath) {
-    throw new Error("`app` was not found");
+  if (!appVersion) {
+    throw new Error("`appVersion` was not found");
   }
 
-  const notarizeOptions = { appBundleId: appId, appPath };
+  var pkgPathArray = params.appOutDir.split("/");
+  pkgPathArray.pop();
+  var pkgPath = pkgPathArray.join("/");
+
+  pkgPath = path.join(pkgPath, `${params.packager.appInfo.productFilename}-${appVersion}.pkg`);
+  try {
+    if (!fs.existsSync(pkgPath)) {
+      console.log("`dmg` was not found");
+      return;
+    }
+  } catch (err) {
+    console.log("`dmg` was not found");
+    return;
+  }
+
+  const notarizeOptions = { appBundleId: appId, pkgPath };
   if (authInfo.appleId) {
     notarizeOptions.appleId = authInfo.appleId;
     notarizeOptions.appleIdPassword = authInfo.appleIdPassword;
@@ -127,7 +158,7 @@ module.exports = async (params) => {
     notarizeOptions.ascProvider = authInfo.teamShortName;
   }
 
-  console.log(`Notarizing ${appId} found at ${appPath}`);
+  console.log(`Notarizing ${appId} found at ${pkgPath}`);
 
   try {
     await notarize(notarizeOptions);
