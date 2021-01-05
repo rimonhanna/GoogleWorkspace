@@ -1,5 +1,5 @@
 {
     "push": {
-        "ref": "refs/heads/dev"
+        "ref": "refs/heads/master"
     }
 }
