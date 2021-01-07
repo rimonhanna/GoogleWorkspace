@@ -47,6 +47,7 @@ jobs:
 
       - name: Get package version
         id: package_version
+        shell: bash
         run: |
           PACKAGE_VERSION=$(cat package.json \
             | grep version \
@@ -58,6 +59,7 @@ jobs:
           echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
 
       - name: Build/release Electron app
+        if: matrix.os == 'macos-latest'
         run: npm run publish
         env:
           # macOS Code signing certificates
@@ -68,6 +70,12 @@ jobs:
           # macOS notarization API key
           API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
+
+      - name: Build/release Electron app
+        if: matrix.os == 'windows-latest'
+        run: npm run publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Commit updated package.json to repo"
         uses: stefanzweifel/git-auto-commit-action@v4.8.0
