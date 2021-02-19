@@ -75,7 +75,7 @@ body {
   padding: 0;
   position: relative;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  /* z-index: 1; */
 }
 .sexytabs > ul > li {
   display: inline-block;
