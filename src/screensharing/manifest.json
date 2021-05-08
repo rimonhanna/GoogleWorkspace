@@ -13,7 +13,6 @@
       "page": "background.html",
       "persistent": false
     },
-    "installation_mode": "force_installed",
     "incognito": "spanning",
     "permissions": [
       "desktopCapture",

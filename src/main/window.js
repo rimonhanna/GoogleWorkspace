@@ -68,58 +68,6 @@ function createMainWindow() {
     }
   });
 
-  let handleTabSelection = function (view) {
-    if (!mainWindow.getBrowserViews().includes(view))
-      mainWindow.addBrowserView(view);
-
-    mainWindow.getBrowserViews().forEach(browserView => {
-      if (view != browserView)
-        mainWindow.removeBrowserView(browserView);
-    });
-    view.setBounds(adjustedBounds(mainWindow));
-  }
-
-  function handleNavigation({url}) {
-
-    var urlArray = url.split("dest=");
-    if (urlArray.length > 1) {
-      url = unescape(urlArray[1]);
-    }
-
-    if (url.includes("meet.google")) {
-      global.googleMeetView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
-    } else if (url.includes("currents.google")) {
-      global.googleCurrentsView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
-    } else if (url.includes("chat.google")) {
-      global.googleChatView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
-    } else if (url.includes("groups.google")) {
-      global.googleGroupsView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
-    } else if (url.includes("calendar.google")) {
-      global.googleCalendarView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('calendar-tab').click();");
-    } else if (url.includes("admin.google")) {
-      global.googleAdminView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('admin-tab').click();");
-    } else if (url.includes("drive.google")) {
-      global.googleDriveView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('drive-tab').click();");
-    } else if (url.includes("mail.google")) {
-      global.googleMailView.webContents.loadURL(url, { userAgent: global.userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
-    } else if (url.includes("notion.so")) {
-      shell.openExternal(url.replace("https://", "notion://"));
-    } else if (url.includes("teams.microsoft")) {
-      shell.openExternal(url.replace("https://", "teams://"));
-    } else if (url.includes("zoom.us")) {
-      shell.openExternal(url.replace("https://", "zoommtg://").replace("/j/", "/start?confno="));
-    } else {
-      shell.openExternal(url);
-    }
-  }
 
   function setAdminVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_ADMIN);
@@ -192,121 +140,15 @@ function createMainWindow() {
     setCalendarVisibility();
   });
 
-  let handleLoadCommit = function (event) {
-    event.sender.focus();
-  };
 
-
-  const googleAdminView = (global.googleAdminView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleAdminView, GOOGLE_ADMIN_URL, "setting-id");
-  ipcMain.on("window.admin", (event) => {
-    handleTabSelection(global.googleAdminView);
-  });
-  googleAdminView.webContents.setWindowOpenHandler(handleNavigation);
-  googleAdminView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  const googleGroupsView = (global.googleGroupsView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleGroupsView, GOOGLE_GROUPS_URL, "group-id");
-  ipcMain.on("window.groups", (event) => {
-    handleTabSelection(global.googleGroupsView);
-  });
-  googleGroupsView.webContents.setWindowOpenHandler(handleNavigation);
-  googleGroupsView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  const googleCurrentsView = (global.googleCurrentsView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleCurrentsView, GOOGLE_CURRENTS_URL, "post-id");
-  ipcMain.on("window.currents", (event) => {
-    handleTabSelection(global.googleCurrentsView);
-  });
-  googleCurrentsView.webContents.setWindowOpenHandler(handleNavigation);
-  googleCurrentsView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  const googleMailView = (global.googleMailView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleMailView, GOOGLE_MAIL_URL, "mail-id");
-  ipcMain.on("window.mail", (event) => {
-    handleTabSelection(global.googleMailView);
-  });
-  googleMailView.webContents.setWindowOpenHandler(handleNavigation);
-  googleMailView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  const googleMeetView = (global.googleMeetView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleMeetView, GOOGLE_MEET_URL, "room-id");
-  ipcMain.on("window.meet", (event) => {
-    handleTabSelection(global.googleMeetView);
-  });
-  googleMeetView.webContents.setWindowOpenHandler(handleNavigation);
-  googleMeetView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  const googleCalendarView = (global.googleCalendarView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleCalendarView, GOOGLE_CALENDAR_URL, "event-id");
-  ipcMain.on("window.calendar", (event) => {
-    handleTabSelection(global.googleCalendarView);
-  });
-  googleCalendarView.webContents.setWindowOpenHandler(handleNavigation);
-  googleCalendarView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  const googleDriveView = (global.googleDriveView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleDriveView, GOOGLE_DRIVE_URL, "file-id");
-  ipcMain.on("window.drive", (event) => {
-    handleTabSelection(global.googleDriveView);
-  });
-  googleDriveView.webContents.setWindowOpenHandler(handleNavigation);
-  googleDriveView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  const googleChatView = (global.googleChatView = new BrowserView({
-    webPreferences: {
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleChatView, GOOGLE_CHAT_URL, "room-id");
-  ipcMain.on("window.chat", (event) => {
-    handleTabSelection(global.googleChatView);
-  });
-  googleChatView.webContents.once("dom-ready", handleLoadCommit);
-  googleChatView.webContents.setWindowOpenHandler(handleNavigation);
+  global.googleAdminView = createSubView("admin", GOOGLE_ADMIN_URL, "setting-id");
+  global.googleGroupsView = createSubView("groups", GOOGLE_GROUPS_URL, "group-id");
+  global.googleCurrentsView = createSubView("currents", GOOGLE_CURRENTS_URL, "post-id");
+  global.googleMailView = createSubView("mail", GOOGLE_MAIL_URL, "mail-id");
+  global.googleMeetView = createSubView("meet", GOOGLE_MEET_URL, "room-id");
+  global.googleCalendarView = createSubView("calendar", GOOGLE_CALENDAR_URL, "event-id");
+  global.googleDriveView = createSubView("drive", GOOGLE_DRIVE_URL, "file-id");
+  global.googleChatView = createSubView("chat", GOOGLE_CHAT_URL, "room-id");
 
   mainWindow.on("maximize", () => {
     mainWindow.webContents.send("window.maximized");
@@ -335,8 +177,7 @@ function createMainWindow() {
   });
 
   let canvasWindow = createCanvasWindow();
-
-  const screenToolsWindow = createScreenToolsWindow();
+  let screenToolsWindow = createScreenToolsWindow();
 
   // screenToolsWindow.moveAbove(canvasWindow.getMediaSourceId());
 
@@ -400,6 +241,60 @@ function createMainWindow() {
   return mainWindow;
 }
 
+let handleTabSelection = function (view) {
+  if (!global.mainWindow.getBrowserViews().includes(view)) {
+    global.mainWindow.addBrowserView(view);
+  }
+
+  global.mainWindow.getBrowserViews().forEach(browserView => {
+    if (view != browserView) {
+      global.mainWindow.removeBrowserView(browserView);
+    }
+  });
+  view.setBounds(adjustedBounds(global.mainWindow));
+}
+
+function handleNavigation({url}) {
+
+  var urlArray = url.split("dest=");
+  if (urlArray.length > 1) {
+    url = unescape(urlArray[1]);
+  }
+
+  if (url.includes("meet.google")) {
+    global.googleMeetView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
+  } else if (url.includes("currents.google")) {
+    global.googleCurrentsView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
+  } else if (url.includes("chat.google")) {
+    global.googleChatView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
+  } else if (url.includes("groups.google")) {
+    global.googleGroupsView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
+  } else if (url.includes("calendar.google")) {
+    global.googleCalendarView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('calendar-tab').click();");
+  } else if (url.includes("admin.google")) {
+    global.googleAdminView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('admin-tab').click();");
+  } else if (url.includes("drive.google")) {
+    global.googleDriveView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('drive-tab').click();");
+  } else if (url.includes("mail.google")) {
+    global.googleMailView.webContents.loadURL(url, { userAgent: global.userAgent });
+    global.mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
+  } else if (url.includes("notion.so")) {
+    shell.openExternal(url.replace("https://", "notion://"));
+  } else if (url.includes("teams.microsoft")) {
+    shell.openExternal(url.replace("https://", "teams://"));
+  } else if (url.includes("zoom.us")) {
+    shell.openExternal(url.replace("https://", "zoommtg://").replace("/j/", "/start?confno="));
+  } else {
+    shell.openExternal(url);
+  }
+}
 
 function addContextMenuItems(mainWindow, params) {
   var contextMenu = buildEditorContextMenu();
@@ -425,22 +320,40 @@ function setMainMenu() {
   Menu.setApplicationMenu(menu);
 }
 
-function createSubView(mainWindow, view, url, deeplink) {
+function createSubView(title, url, deeplink) {
   if (app.commandLine.hasSwitch(deeplink)) {
     url = url + app.commandLine.getSwitchValue(deeplink);
   }
 
-  mainWindow.addBrowserView(view);
+  let handleLoadCommit = function (event) {
+    event.sender.focus();
+  };
+
+  const view = new BrowserView({
+    webPreferences: {
+      enableRemoteModule: true,
+      preload: path.join(__dirname, "preload-view.js"),
+    },
+  });
+
+  global.mainWindow.addBrowserView(view);
+  
+  ipcMain.on("window." + title, (event) => {
+    handleTabSelection(view);
+  });
+  
+  view.webContents.setWindowOpenHandler(handleNavigation);
+  view.webContents.once("dom-ready", handleLoadCommit);
 
   view.webContents.loadURL(url, { userAgent: global.userAgent });
-  view.setBounds(adjustedBounds(mainWindow));
+  view.setBounds(adjustedBounds(global.mainWindow));
   view.webContents.on("did-finish-load", () => {
     view.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
   });
   // view.webContents.openDevTools();
 
-  mainWindow.on("resize", () => {
-    view.setBounds(adjustedBounds(mainWindow));
+  global.mainWindow.on("resize", () => {
+    view.setBounds(adjustedBounds(global.mainWindow));
   });
 
   ipcMain.on("window.home", () => {
@@ -452,9 +365,11 @@ function createSubView(mainWindow, view, url, deeplink) {
   });
 
   view.webContents.on("context-menu", (event, params) => {
-    var contextMenu = addContextMenuItems(mainWindow, params);
+    var contextMenu = addContextMenuItems(global.mainWindow, params);
     contextMenu.popup();
   });
+
+  return view;
 }
 
 function adjustedBounds(mainWindow) {
