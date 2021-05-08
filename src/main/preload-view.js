@@ -1,4 +1,5 @@
-const { ipcRenderer, remote } = require("electron");
+const { ipcRenderer, contextBridge } = require("electron");
+const remote = require('@electron/remote');
 const { setOSTheme } = require("./preload-theme.js");
 
 const currentWindow = remote.getCurrentWindow();

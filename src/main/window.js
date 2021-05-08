@@ -27,15 +27,6 @@ const GOOGLE_MEET_URL = "https://meet.google.com/";
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar";
 const GOOGLE_DRIVE_URL = "https://drive.google.com/";
 
-var userAgent;
-if (process.platform === "win32") {
-  userAgent = WIN_USERAGENT;
-} else if (process.platform === "darwin") {
-  userAgent = MAC_USERAGENT;
-} else {
-  userAgent = LINUX_USERAGENT;
-}
-
 function createMainWindow() {
   const mainWindowState = windowStateKeeper({
     defaultWidth: 1280,
@@ -56,9 +47,15 @@ function createMainWindow() {
       spellcheck: true,
       nodeIntegration: true,
       contextIsolation: true,
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload.js"),
     },
   }));
+
+  global.userAgent = mainWindow.webContents.userAgent;
+  global.userAgent = userAgent.replace(/GoogleWorkspace\/[0-9\.-]*/,'');
+  global.userAgent = userAgent.replace(/Electron\/*/,'');
+  mainWindow.webContents.userAgent = global.userAgent;
 
   setMainMenu();
 
@@ -82,8 +79,7 @@ function createMainWindow() {
     view.setBounds(adjustedBounds(mainWindow));
   }
 
-  let handleNavigation = function (event, url, frameName, disposition, options) {
-    event.preventDefault();
+  function handleNavigation({url}) {
 
     var urlArray = url.split("dest=");
     if (urlArray.length > 1) {
@@ -91,29 +87,21 @@ function createMainWindow() {
     }
 
     if (url.includes("meet.google")) {
-      global.googleMeetView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
+      global.googleMeetView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("currents.google")) {
-      global.googleCurrentsView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
+      global.googleCurrentsView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("chat.google")) {
-      global.googleChatView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
+      global.googleChatView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("groups.google")) {
-      global.googleGroupsView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
+      global.googleGroupsView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("calendar.google")) {
-      global.googleCalendarView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('calendar-tab').click();");
+      global.googleCalendarView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("admin.google")) {
-      global.googleAdminView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('admin-tab').click();");
+      global.googleAdminView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("drive.google")) {
-      global.googleDriveView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('drive-tab').click();");
+      global.googleDriveView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("mail.google")) {
-      global.googleMailView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
+      global.googleMailView.webContents.loadURL(url, { userAgent: global.userAgent });
     } else if (url.includes("notion.so")) {
       shell.openExternal(url.replace("https://", "notion://"));
     } else if (url.includes("teams.microsoft")) {
@@ -123,7 +111,7 @@ function createMainWindow() {
     } else {
       shell.openExternal(url);
     }
-  };
+  }
 
   function setAdminVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_ADMIN);
@@ -203,6 +191,7 @@ function createMainWindow() {
 
   const googleAdminView = (global.googleAdminView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -210,12 +199,13 @@ function createMainWindow() {
   ipcMain.on("window.admin", (event) => {
     handleTabSelection(global.googleAdminView);
   });
-  googleAdminView.webContents.on("new-window", handleNavigation);
+  googleAdminView.webContents.setWindowOpenHandler(handleNavigation);
   googleAdminView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleGroupsView = (global.googleGroupsView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -223,12 +213,13 @@ function createMainWindow() {
   ipcMain.on("window.groups", (event) => {
     handleTabSelection(global.googleGroupsView);
   });
-  googleGroupsView.webContents.on("new-window", handleNavigation);
+  googleGroupsView.webContents.setWindowOpenHandler(handleNavigation);
   googleGroupsView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleCurrentsView = (global.googleCurrentsView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -236,12 +227,13 @@ function createMainWindow() {
   ipcMain.on("window.currents", (event) => {
     handleTabSelection(global.googleCurrentsView);
   });
-  googleCurrentsView.webContents.on("new-window", handleNavigation);
+  googleCurrentsView.webContents.setWindowOpenHandler(handleNavigation);
   googleCurrentsView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleMailView = (global.googleMailView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -249,12 +241,13 @@ function createMainWindow() {
   ipcMain.on("window.mail", (event) => {
     handleTabSelection(global.googleMailView);
   });
-  googleMailView.webContents.on("new-window", handleNavigation);
+  googleMailView.webContents.setWindowOpenHandler(handleNavigation);
   googleMailView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleMeetView = (global.googleMeetView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -262,12 +255,13 @@ function createMainWindow() {
   ipcMain.on("window.meet", (event) => {
     handleTabSelection(global.googleMeetView);
   });
-  googleMeetView.webContents.on("new-window", handleNavigation);
+  googleMeetView.webContents.setWindowOpenHandler(handleNavigation);
   googleMeetView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleCalendarView = (global.googleCalendarView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -275,12 +269,13 @@ function createMainWindow() {
   ipcMain.on("window.calendar", (event) => {
     handleTabSelection(global.googleCalendarView);
   });
-  googleCalendarView.webContents.on("new-window", handleNavigation);
+  googleCalendarView.webContents.setWindowOpenHandler(handleNavigation);
   googleCalendarView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleDriveView = (global.googleDriveView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -288,12 +283,13 @@ function createMainWindow() {
   ipcMain.on("window.drive", (event) => {
     handleTabSelection(global.googleDriveView);
   });
-  googleDriveView.webContents.on("new-window", handleNavigation);
+  googleDriveView.webContents.setWindowOpenHandler(handleNavigation);
   googleDriveView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleChatView = (global.googleChatView = new BrowserView({
     webPreferences: {
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload-view.js"),
     },
   }));
@@ -301,9 +297,8 @@ function createMainWindow() {
   ipcMain.on("window.chat", (event) => {
     handleTabSelection(global.googleChatView);
   });
-  googleChatView.webContents.on("new-window", handleNavigation);
   googleChatView.webContents.once("dom-ready", handleLoadCommit);
-
+  googleChatView.webContents.setWindowOpenHandler(handleNavigation);
 
   mainWindow.on("maximize", () => {
     mainWindow.webContents.send("window.maximized");
@@ -392,13 +387,13 @@ function createMainWindow() {
 
   // mainWindow.addBrowserView(global.googleChatView);
   // global.googleChatView.setBounds(adjustedBounds(mainWindow));
-  // global.googleChatView.webContents.openDevTools({ detach: true })
+  // mainWindow.webContents.openDevTools()
 
   return mainWindow;
 }
 
 
-function addContextMenuItems(params) {
+function addContextMenuItems(mainWindow, params) {
   var contextMenu = buildEditorContextMenu();
   contextMenu.append(new MenuItem({
     label: `Search Google for "${params.selectionText.substr(0,15).trim() + (params.selectionText.length > 15? "...": "")}"`,
@@ -411,7 +406,7 @@ function addContextMenuItems(params) {
   contextMenu.append(new MenuItem({
     label: "Inspect Element",
     click: () => {
-      mainWindow.getBrowserView().webContents.inspectElement(rightClickPosition.x, rightClickPosition.y);
+      mainWindow.getBrowserViews()[0].webContents.inspectElement(0, 0);
     },
   }));
   return contextMenu;
@@ -429,7 +424,7 @@ function createSubView(mainWindow, view, url, deeplink) {
 
   mainWindow.addBrowserView(view);
 
-  view.webContents.loadURL(url, { userAgent: userAgent });
+  view.webContents.loadURL(url, { userAgent: global.userAgent });
   view.setBounds(adjustedBounds(mainWindow));
   view.webContents.on("did-finish-load", () => {
     view.webContents.insertCSS(fs.readFileSync(path.join(__dirname, "..", "renderer", "css", "screen.css")).toString());
@@ -441,7 +436,7 @@ function createSubView(mainWindow, view, url, deeplink) {
   });
 
   ipcMain.on("window.home", () => {
-    view.webContents.loadURL(url, { userAgent: userAgent });
+    view.webContents.loadURL(url, { userAgent: global.userAgent });
   });
 
   ipcMain.on("screenshare.stop", () => {
@@ -449,7 +444,7 @@ function createSubView(mainWindow, view, url, deeplink) {
   });
 
   view.webContents.on("context-menu", (event, params) => {
-    var contextMenu = addContextMenuItems(params);
+    var contextMenu = addContextMenuItems(mainWindow, params);
     contextMenu.popup();
   });
 }
@@ -474,6 +469,7 @@ function createCanvasWindow() {
     frame: false,
     webPreferences: {
       contextIsolation: true,
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload.js"),
     },
     focusable: false,
@@ -501,6 +497,7 @@ function createScreenToolsWindow() {
     transparent: true,
     webPreferences: {
       contextIsolation: true,
+      enableRemoteModule: true,
       preload: path.join(__dirname, "preload.js"),
     },
   });

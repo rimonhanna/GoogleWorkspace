@@ -6,6 +6,8 @@ const { setThemeOnAllWindows } = require("./helpers/theme");
 const store = require("./helpers/store");
 const config = require("./helpers/config");
 const isDev = require("electron-is-dev");
+const path = require("path");
+require('@electron/remote/main').initialize()
 const {
   CONSTANTS: { OS_PLATFORMS, THEME_OPTIONS, USER_PREF_KEYS },
 } = require("./helpers/util");
@@ -21,19 +23,6 @@ if (process.platform !== "win32" && process.platform !== "darwin") {
 
 app.allowRendererProcessReuse = true;
 app.whenReady().then(async () => {
-  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-    if (process.platform === "win32") {
-      app.userAgentFallback = WIN_USERAGENT;
-      details.requestHeaders["User-Agent"] = WIN_USERAGENT;
-    } else if (process.platform === "darwin") {
-      app.userAgentFallback = MAC_USERAGENT;
-      details.requestHeaders["User-Agent"] = MAC_USERAGENT;
-    } else {
-      app.userAgentFallback = LINUX_USERAGENT;
-      details.requestHeaders["User-Agent"] = LINUX_USERAGENT;
-    }
-    callback({ requestHeaders: details.requestHeaders });
-  });
   if (!isDev && process.platform === "darwin") {
     if (systemPreferences.getMediaAccessStatus("camera") !== "granted") {
       await systemPreferences.askForMediaAccess("camera");
@@ -46,7 +35,22 @@ app.whenReady().then(async () => {
       hasScreenCapturePermission();
     }
   }
+  
+  try {
+    const ext = await session.defaultSession.loadExtension(path.join(__dirname, 'screensharing'), { allowFileAccess: true })
+    console.error(ext)
+  } catch(err) {
+    console.error(err)
+  }
+
   createMainWindow();
+
+  let userAgent = global.mainWindow.webContents.userAgent;
+
+  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+    details.requestHeaders["User-Agent"] = userAgent;
+    callback({ cancel: false, requestHeaders: details.requestHeaders });
+  });
 });
 
 app.on("window-all-closed", function () {

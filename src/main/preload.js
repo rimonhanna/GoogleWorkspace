@@ -1,5 +1,5 @@
-const { ipcRenderer, remote } = require("electron");
-const path = require("path");
+const { contextBridge, ipcRenderer } = require("electron");
+const remote = require('@electron/remote');
 const { setOSTheme } = require("./preload-theme");
 
 const currentWindow = remote.getCurrentWindow();
@@ -30,4 +30,11 @@ window.addEventListener("DOMContentLoaded", () => {
   ipcRenderer.send("theme-request", currentWindow.webContents.id);
 });
 
-require(path.join(__dirname, "..", "renderer", "preload.js"))
+contextBridge.exposeInMainWorld("ipc", {
+  send: (channel, ...data) => {
+    ipcRenderer.send(channel, data);
+  },
+  on: (channel, callback) => {
+    ipcRenderer.on(channel, (event, ...args) => callback(...args));
+  },
+});
