@@ -13,7 +13,8 @@
       "page": "background.html",
       "persistent": false
     },
-    "incognito": "split",
+    "installation_mode": "force_installed",
+    "incognito": "spanning",
     "permissions": [
       "desktopCapture",
       "enterprise.hardwarePlatform",

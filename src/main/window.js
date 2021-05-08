@@ -88,20 +88,28 @@ function createMainWindow() {
 
     if (url.includes("meet.google")) {
       global.googleMeetView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
     } else if (url.includes("currents.google")) {
       global.googleCurrentsView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
     } else if (url.includes("chat.google")) {
       global.googleChatView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
     } else if (url.includes("groups.google")) {
       global.googleGroupsView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('groups-tab').click();");
     } else if (url.includes("calendar.google")) {
       global.googleCalendarView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('calendar-tab').click();");
     } else if (url.includes("admin.google")) {
       global.googleAdminView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('admin-tab').click();");
     } else if (url.includes("drive.google")) {
       global.googleDriveView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('drive-tab').click();");
     } else if (url.includes("mail.google")) {
       global.googleMailView.webContents.loadURL(url, { userAgent: global.userAgent });
+      mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
     } else if (url.includes("notion.so")) {
       shell.openExternal(url.replace("https://", "notion://"));
     } else if (url.includes("teams.microsoft")) {

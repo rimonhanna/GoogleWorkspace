@@ -1,13 +1,14 @@
 /* Modules to control application life and create native browser window */
 const { app, BrowserWindow, ipcMain, systemPreferences, session, nativeTheme } = require("electron");
+// const { ExtensibleSession } = require("electron-extensions/build/main");
 const { hasScreenCapturePermission, hasPromptedForPermission } = require("mac-screen-capture-permissions");
-const { WIN_USERAGENT, MAC_USERAGENT, LINUX_USERAGENT } = require("./constants");
 const { setThemeOnAllWindows } = require("./helpers/theme");
 const store = require("./helpers/store");
 const config = require("./helpers/config");
 const isDev = require("electron-is-dev");
 const path = require("path");
 require('@electron/remote/main').initialize()
+
 const {
   CONSTANTS: { OS_PLATFORMS, THEME_OPTIONS, USER_PREF_KEYS },
 } = require("./helpers/util");
@@ -21,8 +22,18 @@ if (process.platform !== "win32" && process.platform !== "darwin") {
   app.disableHardwareAcceleration();
 }
 
-app.allowRendererProcessReuse = true;
+// const extensions = new ExtensibleSession();
+
+app.allowRendererProcessReuse = false;
 app.whenReady().then(async () => {
+  try {
+    // const ext = await extensions.loadExtension(path.join(__dirname, 'screensharing'));
+    const ext = await session.defaultSession.loadExtension(path.join(__dirname, 'screensharing'));
+    console.error(ext)
+  } catch(err) {
+    console.error(err)
+  }
+
   if (!isDev && process.platform === "darwin") {
     if (systemPreferences.getMediaAccessStatus("camera") !== "granted") {
       await systemPreferences.askForMediaAccess("camera");
@@ -34,13 +45,6 @@ app.whenReady().then(async () => {
       hasPromptedForPermission();
       hasScreenCapturePermission();
     }
-  }
-  
-  try {
-    const ext = await session.defaultSession.loadExtension(path.join(__dirname, 'screensharing'), { allowFileAccess: true })
-    console.error(ext)
-  } catch(err) {
-    console.error(err)
   }
 
   createMainWindow();
