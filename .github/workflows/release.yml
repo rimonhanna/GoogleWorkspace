@@ -32,6 +32,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
+          check-latest: true
 
       - name: Increment version
         run: npm version patch --no-git-tag-version
@@ -78,7 +79,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Commit updated package.json to repo"
-        uses: stefanzweifel/git-auto-commit-action@v4.8.0
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: "Created new package version"
           file_pattern: ./package*.json
