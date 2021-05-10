@@ -30,8 +30,8 @@
     "read-pkg-up": "^7.0.1"
   },
   "dependencies": {
-    "about-window": "^1.13.4",
-    "darkreader": "^4.9.22",
+    "about-window": "*",
+    "darkreader": "*",
     "electron-default-menu": "^1.0.2",
     "electron-editor-context-menu": "^1.1.1",
     "electron-is-dev": "^1.2.0",

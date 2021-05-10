@@ -76,6 +76,6 @@ nativeTheme.on("updated", () => {
 });
 
 // Listen for changes in store
-const unsubscribeStoreWatch = store.onDidChange(USER_PREF_KEYS.THEME, () => {
-  setThemeOnAllWindows();
-});
+// store.onDidChange(USER_PREF_KEYS.THEME, () => {
+//   setThemeOnAllWindows();
+// });

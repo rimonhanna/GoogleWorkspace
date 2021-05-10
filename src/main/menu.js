@@ -124,11 +124,12 @@ const template = [
       { role: "zoomIn" },
       { role: "zoomOut" },
       { role: "resetZoom" },
-      {
-        label: "Toggle Dark Mode",
-        accelerator: "CmdOrCtrl+T",
-        click: toggleDarkMode,
-      },
+      // {
+      //   label: "Toggle Dark Mode",
+      //   accelerator: "CmdOrCtrl+T",
+      //   checked: store.get(USER_PREF_KEYS.THEME),
+      //   click: toggleDarkMode,
+      // },
       { type: "separator" },
       {
         label: "Admin",
