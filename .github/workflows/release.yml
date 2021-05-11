@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, windows-latest]
     steps:
       - name: Cache multiple paths
         uses: actions/cache@v2

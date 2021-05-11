@@ -46,23 +46,19 @@
     "appId": "com.rimonhanna.googleWorkspace",
     "productName": "Google Workspace",
     "afterAllArtifactBuild": "electron-builder-notarize-pkg",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "rimonhanna",
+        "repo": "googleworkspace",
+        "releaseType": "release"
+      }
+    ],
     "win": {
-      "publish": [
-        {
-          "provider": "github",
-          "releaseType": "release"
-        }
-      ]
     },
     "mac": {
       "target": [
         "pkg"
-      ],
-      "publish": [
-        {
-          "provider": "github",
-          "releaseType": "release"
-        }
       ],
       "hardenedRuntime": true,
       "entitlements": "./build/entitlements.mac.plist",
