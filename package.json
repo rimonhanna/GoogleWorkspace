@@ -23,7 +23,7 @@
   "devDependencies": {
     "builder-util": "^22.8.0",
     "electron": "^8.5.3",
-    "electron-builder": "^22.8.0",
+    "electron-builder": "^22.10.5",
     "electron-builder-notarize-pkg": "^1.2.0",
     "electron-notarize": "^1.0.0",
     "js-yaml": "^3.14.0",
@@ -47,12 +47,7 @@
     "productName": "Google Workspace",
     "afterAllArtifactBuild": "electron-builder-notarize-pkg",
     "publish": [
-      {
-        "provider": "github",
-        "owner": "rimonhanna",
-        "repo": "googleworkspace",
-        "releaseType": "release"
-      }
+      "github"
     ],
     "win": {},
     "mac": {
