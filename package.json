@@ -54,7 +54,8 @@
         "releaseType": "release"
       }
     ],
-    "win": {},
+    "win": {
+    },
     "mac": {
       "target": [
         "pkg"
