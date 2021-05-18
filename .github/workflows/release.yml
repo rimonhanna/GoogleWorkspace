@@ -10,61 +10,7 @@ on:
     branches: [master]
 
 jobs:
-  prepare-release:
-    name: Prepare-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache multiple paths
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/cache
-            !~/cache/exclude
-            **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-          check-latest: true
-
-      - name: Increment version
-        run: npm version patch --no-git-tag-version
-
-      - name: Get package version
-        id: package_version
-        shell: bash
-        run: |
-          PACKAGE_VERSION=$(cat package.json \
-            | grep version \
-            | head -1 \
-            | awk -F: '{ print $2 }' \
-            | sed 's/[",]//g' \
-            | tr -d '[[:space:]]')
-          echo "$PACKAGE_VERSION"
-          echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
-
-      - uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: "v${{ steps.package_version.outputs.PACKAGE_VERSION }}"
-          release_name: ${{ steps.package_version.outputs.PACKAGE_VERSION }}
-          draft: true
-          prerelease: false
-
-      - name: "Commit updated package.json to repo"
-        uses: stefanzweifel/git-auto-commit-action@v4.11.0
-        with:
-          commit_message: "Created new package version"
-          file_pattern: ./package*.json
-          push_options: "--force"
-
   build:
-    needs: prepare-release
     name: Release
     runs-on: ${{ matrix.os }}
     strategy:
@@ -88,6 +34,9 @@ jobs:
           node-version: "14"
           check-latest: true
 
+      - name: Increment version
+        run: npm version patch --no-git-tag-version
+
       - name: Install dependancies
         run: npm install
       
@@ -96,6 +45,19 @@ jobs:
         run: |
             mkdir -p ~/private_keys/
             echo '${{ secrets.APPLE_API_KEY }}' > ~/private_keys/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
+
+      - name: Get package version
+        id: package_version
+        shell: bash
+        run: |
+          PACKAGE_VERSION=$(cat package.json \
+            | grep version \
+            | head -1 \
+            | awk -F: '{ print $2 }' \
+            | sed 's/[",]//g' \
+            | tr -d '[[:space:]]')
+          echo "$PACKAGE_VERSION"
+          echo "::set-output name=PACKAGE_VERSION::$PACKAGE_VERSION"
 
       - name: Build/release Electron app
         if: matrix.os == 'macos-latest'
@@ -115,3 +77,10 @@ jobs:
         run: npm run publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Commit updated package.json to repo"
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
+        with:
+          commit_message: "Created new package version"
+          file_pattern: ./package*.json
+          push_options: "--force"

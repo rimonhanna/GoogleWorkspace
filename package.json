@@ -8,7 +8,7 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "publish": "electron-builder -p onTagOrDraft"
+    "publish": "electron-builder -p always"
   },
   "repository": "https://github.com/rimonhanna/GoogleWorkspace",
   "keywords": [
