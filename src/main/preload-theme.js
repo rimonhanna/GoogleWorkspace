@@ -27,21 +27,43 @@ const enableLight = () => {
 // document contexts provided by preload.js.
 const setOSTheme = async (toThemeStyle) => {
   DarkReader.auto();
-  var setColors = function  () {
+  var fixDarkMode = function  () {
     document.querySelectorAll("iframe").forEach(frame => {
-      frame.contentWindow.document.querySelectorAll('.t5F5nf').forEach(span => { 
+      frame.contentWindow.document.querySelectorAll('span[role="presentation"]').forEach(span => { 
         span.setAttribute('style', 'color:#acacac !important');
       });
+      // if (frame.title == "Chat content") {
+      //   frame.contentWindow.addEventListener("DOMContentLoaded", () => {
+      //     frame.contentWindow.document.querySelectorAll(".Bl2pUd, .McQwEc, .nF6pT, .oGsu4").forEach(item => { 
+      //       item.setAttribute('style', 'background-color:#181A1B !important');
+      //     });
+      //     frame.contentWindow.document.querySelectorAll(".Zc1Emd, .njhDLd ").forEach(item => { 
+      //       item.setAttribute('style', 'color:#acacac !important');
+      //     });
+      //   });
+        
+        
+      //   // frame.contentWindow.document.querySelectorAll(".oGsu4").forEach(item => { 
+      //   //   item.setAttribute('style', 'background-color:#181A1B !important');
+      //   // });
+      //   // frame.contentWindow.document.querySelectorAll(".cZICLc").forEach(item => { 
+      //   //   item.setAttribute('style', 'background-color:#202223 !important');
+      //   // });
+      // }
+      
     });
   }
   if (nativeTheme.shouldUseDarkColors) {
-    setColors();
+    fixDarkMode();
     window.addEventListener("load", () => {
-      setColors();
+      fixDarkMode();
+    });
+    window.addEventListener("DOMSubtreeModified", () => {
+      fixDarkMode();
     });
   } else {
     document.querySelectorAll("iframe").forEach(frame => {
-      frame.contentWindow.document.querySelectorAll('.t5F5nf').forEach(span => { 
+      frame.contentWindow.document.querySelectorAll('span[role="presentation"]').forEach(span => { 
         span.removeAttribute('style');
       });
     });
