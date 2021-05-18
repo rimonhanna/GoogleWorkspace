@@ -51,8 +51,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.package_version.PACKAGE_VERSION }}
-          release_name: ${{ steps.package_version.PACKAGE_VERSION }}
+          tag_name: ${{ steps.package_version.outputs.PACKAGE_VERSION }}
+          release_name: ${{ steps.package_version.outputs.PACKAGE_VERSION }}
           draft: true
           prerelease: false
 
@@ -112,6 +112,6 @@ jobs:
 
       - name: Build/release Electron app
         if: matrix.os == 'windows-latest'
-        run: npm run dist
+        run: npm run publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
