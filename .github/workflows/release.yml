@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [macos-latest, windows-latest]
     steps:
       - name: Cache multiple paths
         uses: actions/cache@v2
@@ -74,7 +74,7 @@ jobs:
 
       - name: Build/release Electron app
         if: matrix.os == 'windows-latest'
-        run: npm run publish
+        run: npm run dist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
