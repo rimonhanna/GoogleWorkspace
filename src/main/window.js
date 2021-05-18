@@ -22,7 +22,7 @@ const GOOGLE_ADMIN_URL = "https://admin.google.com/";
 const GOOGLE_GROUPS_URL = "https://groups.google.com/my-groups";
 const GOOGLE_CURRENTS_URL = "https://currents.google.com/";
 const GOOGLE_MAIL_URL = "https://mail.google.com/";
-const GOOGLE_CHAT_URL = "https://chat.google.com/";
+const GOOGLE_CHAT_URL = "https://mail.google.com/chat/u/0/#chat/welcome";
 const GOOGLE_MEET_URL = "https://meet.google.com/";
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar";
 const GOOGLE_DRIVE_URL = "https://drive.google.com/";
@@ -295,6 +295,7 @@ function createMainWindow() {
   const googleChatView = (global.googleChatView = new BrowserView({
     webPreferences: {
       preload: path.join(__dirname, "preload-view.js"),
+      webSecurity: false
     },
   }));
   createSubView(mainWindow, googleChatView, GOOGLE_CHAT_URL, "room-id");
@@ -398,7 +399,7 @@ function createMainWindow() {
 }
 
 
-function addContextMenuItems(params) {
+function addContextMenuItems(mainWindow, params) {
   var contextMenu = buildEditorContextMenu();
   contextMenu.append(new MenuItem({
     label: `Search Google for "${params.selectionText.substr(0,15).trim() + (params.selectionText.length > 15? "...": "")}"`,
@@ -411,7 +412,7 @@ function addContextMenuItems(params) {
   contextMenu.append(new MenuItem({
     label: "Inspect Element",
     click: () => {
-      mainWindow.getBrowserView().webContents.inspectElement(rightClickPosition.x, rightClickPosition.y);
+      mainWindow.getBrowserViews()[0].webContents.inspectElement(0, 0);
     },
   }));
   return contextMenu;
@@ -449,7 +450,7 @@ function createSubView(mainWindow, view, url, deeplink) {
   });
 
   view.webContents.on("context-menu", (event, params) => {
-    var contextMenu = addContextMenuItems(params);
+    var contextMenu = addContextMenuItems(mainWindow, params);
     contextMenu.popup();
   });
 }

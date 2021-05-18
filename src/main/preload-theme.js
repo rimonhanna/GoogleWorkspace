@@ -1,4 +1,6 @@
 const DarkReader = require("darkreader");
+const electron = require("electron")
+const nativeTheme = electron.remote.nativeTheme
 
 // const {
 //   CONSTANTS: { THEME_OPTIONS },
@@ -24,16 +26,27 @@ const enableLight = () => {
 // Set OS theme. This script will be run in the respective
 // document contexts provided by preload.js.
 const setOSTheme = async (toThemeStyle) => {
-  // if (toThemeStyle === THEME_OPTIONS.DARK) {
-  //   enableDark();
-  // } else {
-  //   enableLight();
-  // }
-  DarkReader.auto({
-    brightness: 100,
-    contrast: 90,
-    sepia: 10,
-  });
+  DarkReader.auto();
+  var setColors = function  () {
+    document.querySelectorAll("iframe").forEach(frame => {
+      frame.contentWindow.document.querySelectorAll('.t5F5nf').forEach(span => { 
+        span.setAttribute('style', 'color:#acacac !important');
+      });
+    });
+  }
+  if (nativeTheme.shouldUseDarkColors) {
+    setColors();
+    window.addEventListener("load", () => {
+      setColors();
+    });
+  } else {
+    document.querySelectorAll("iframe").forEach(frame => {
+      frame.contentWindow.document.querySelectorAll('.t5F5nf').forEach(span => { 
+        span.removeAttribute('style');
+      });
+    });
+  }
+
 };
 
 module.exports = { setOSTheme };

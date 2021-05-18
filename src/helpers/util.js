@@ -19,7 +19,7 @@ const CONSTANTS = {
     AUTO: "auto",
   },
   USER_PREF_KEYS: {
-    THEME: "theme",
+    THEME: "auto",
     EXTERNAL_LINKS: "openLinksInBrowser",
     SHOW_ADMIN: "showAdmin",
     SHOW_GROUPS: "showGroups",

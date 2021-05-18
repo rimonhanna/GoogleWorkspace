@@ -69,9 +69,9 @@ ipcMain.on("theme-request", function (_, webContentsId) {
 // Listen for changes in native os theme to set theme
 nativeTheme.on("updated", () => {
   // Don't change theme if not set to auto.
-  if (store.get(USER_PREF_KEYS.THEME) !== THEME_OPTIONS.AUTO) {
-    return;
-  }
+  // if (store.get(USER_PREF_KEYS.THEME) !== THEME_OPTIONS.AUTO) {
+  //   return;
+  // }
   setThemeOnAllWindows();
 });
 
