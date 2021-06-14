@@ -116,8 +116,8 @@ function createMainWindow() {
       mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
     } else if (url.includes("notion.so")) {
       shell.openExternal(url.replace("https://", "notion://"));
-    } else if (url.includes("teams.microsoft")) {
-      shell.openExternal(url.replace("https://", "teams://"));
+    // } else if (url.includes("teams.microsoft")) {
+    //   shell.openExternal(url.replace("https://", "teams://"));
     } else if (url.includes("zoom.us")) {
       shell.openExternal(url.replace("https://", "zoommtg://").replace("/j/", "/start?confno="));
     } else {
