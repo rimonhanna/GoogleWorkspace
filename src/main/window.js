@@ -127,7 +127,7 @@ function createMainWindow() {
 
   function setAdminVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_ADMIN);
-    if (toBoolean == true) {
+    if (toBoolean) {
       mainWindow.webContents.executeJavaScript("$('#admin-li').removeClass('hidden')");
     } else {
       mainWindow.webContents.executeJavaScript("$('#admin-li').addClass('hidden')");
@@ -136,16 +136,25 @@ function createMainWindow() {
 
   function setGroupsVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_GROUPS);
-    if (toBoolean == true) {
+    if (toBoolean) {
       mainWindow.webContents.executeJavaScript("$('#groups-li').removeClass('hidden')");
     } else {
       mainWindow.webContents.executeJavaScript("$('#groups-li').addClass('hidden')");
     }
   }
 
+  function setCurrentsVisibility() {
+    var toBoolean = store.get(USER_PREF_KEYS.SHOW_CURRENTS);
+    if (toBoolean) {
+      mainWindow.webContents.executeJavaScript("$('#currents-li').removeClass('hidden')");
+    } else {
+      mainWindow.webContents.executeJavaScript("$('#currents-li').addClass('hidden')");
+    }
+  }
+
   function setDriveVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_DRIVE);
-    if (toBoolean == true) {
+    if (toBoolean) {
       mainWindow.webContents.executeJavaScript("$('#drive-li').removeClass('hidden')");
     } else {
       mainWindow.webContents.executeJavaScript("$('#drive-li').addClass('hidden')");
@@ -154,7 +163,7 @@ function createMainWindow() {
 
   function setMailVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
-    if (toBoolean == true) {
+    if (toBoolean) {
       mainWindow.webContents.executeJavaScript("$('#mail-li').removeClass('hidden')");
     } else {
       mainWindow.webContents.executeJavaScript("$('#mail-li').addClass('hidden')");
@@ -163,7 +172,7 @@ function createMainWindow() {
 
   function setCalendarVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_CALENDAR);
-    if (toBoolean == true) {
+    if (toBoolean) {
       mainWindow.webContents.executeJavaScript("$('#calendar-li').removeClass('hidden')");
     } else {
       mainWindow.webContents.executeJavaScript("$('#calendar-li').addClass('hidden')");
@@ -174,6 +183,7 @@ function createMainWindow() {
   setGroupsVisibility();
   setDriveVisibility();
   setMailVisibility();
+  setCurrentsVisibility();
   setCalendarVisibility();
 
   store.onDidChange(USER_PREF_KEYS.SHOW_ADMIN, () => {
@@ -182,6 +192,10 @@ function createMainWindow() {
 
   store.onDidChange(USER_PREF_KEYS.SHOW_GROUPS, () => {
     setGroupsVisibility();
+  });
+
+  store.onDidChange(USER_PREF_KEYS.SHOW_CURRENTS, () => {
+    setCurrentsVisibility();
   });
 
   store.onDidChange(USER_PREF_KEYS.SHOW_DRIVE, () => {

@@ -27,31 +27,37 @@ const about = () => {
 
 const toggleAdminView = () => {
   var currentAdmin = store.get(USER_PREF_KEYS.SHOW_ADMIN);
-  currentAdmin = currentAdmin == true? false: true;
+  currentAdmin = currentAdmin? false: true;
   store.set(USER_PREF_KEYS.SHOW_ADMIN, currentAdmin);
 }
 
 const toggleGroupsView = () => {
   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_GROUPS);
-  currentBoolean = currentBoolean == true? false: true;
+  currentBoolean = currentBoolean? false: true;
   store.set(USER_PREF_KEYS.SHOW_GROUPS, currentBoolean);
+}
+
+const toggleCurrentsView = () => {
+  var currentBoolean = store.get(USER_PREF_KEYS.SHOW_CURRENTS);
+  currentBoolean = currentBoolean? false: true;
+  store.set(USER_PREF_KEYS.SHOW_CURRENTS, currentBoolean);
 }
 
 const toggleDriveView = () => {
   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_DRIVE);
-  currentBoolean = currentBoolean == true? false: true;
+  currentBoolean = currentBoolean? false: true;
   store.set(USER_PREF_KEYS.SHOW_DRIVE, currentBoolean);
 }
 
 const toggleMailView = () => {
   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
-  currentBoolean = currentBoolean == true? false: true;
+  currentBoolean = currentBoolean? false: true;
   store.set(USER_PREF_KEYS.SHOW_MAIL, currentBoolean);
 }
 
 const toggleCalendarView = () => {
   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_CALENDAR);
-  currentBoolean = currentBoolean == true? false: true;
+  currentBoolean = currentBoolean? false: true;
   store.set(USER_PREF_KEYS.SHOW_CALENDAR, currentBoolean);
 }
 
@@ -142,6 +148,12 @@ const template = [
         type: "checkbox",
         checked: store.get(USER_PREF_KEYS.SHOW_GROUPS),
         click: toggleGroupsView,
+      },
+      {
+        label: "Currents",
+        type: "checkbox",
+        checked: store.get(USER_PREF_KEYS.SHOW_CURRENTS),
+        click: toggleCurrentsView,
       },
       {
         label: "Mail",
