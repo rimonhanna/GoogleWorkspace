@@ -14,10 +14,10 @@ const schema = {
     type: "boolean",
     default: false,
   },
-  showCurrents: {
-    type: "boolean",
-    default: false,
-  },
+  // showCurrents: {
+  //   type: "boolean",
+  //   default: false,
+  // },
   showGroups: {
     type: "boolean",
     default: true,
@@ -30,10 +30,10 @@ const schema = {
     type: "boolean",
     default: true,
   },
-  showMail: {
-    type: "boolean",
-    default: true,
-  },
+  // showMail: {
+  //   type: "boolean",
+  //   default: true,
+  // },
 };
 
 module.exports = new Store({ schema });
