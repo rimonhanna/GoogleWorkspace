@@ -93,9 +93,9 @@ function createMainWindow() {
     if (url.includes("meet.google")) {
       global.googleMeetView.webContents.loadURL(url, { userAgent: userAgent });
       mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
-    } else if (url.includes("currents.google")) {
-      global.googleCurrentsView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
+    // } else if (url.includes("currents.google")) {
+    //   global.googleCurrentsView.webContents.loadURL(url, { userAgent: userAgent });
+    //   mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
     } else if (url.includes("chat.google")) {
       global.googleChatView.webContents.loadURL(url, { userAgent: userAgent });
       mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
@@ -111,9 +111,9 @@ function createMainWindow() {
     } else if (url.includes("drive.google")) {
       global.googleDriveView.webContents.loadURL(url, { userAgent: userAgent });
       mainWindow.webContents.executeJavaScript("document.getElementById('drive-tab').click();");
-    } else if (url.includes("mail.google")) {
-      global.googleMailView.webContents.loadURL(url, { userAgent: userAgent });
-      mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
+    // } else if (url.includes("mail.google")) {
+    //   global.googleMailView.webContents.loadURL(url, { userAgent: userAgent });
+    //   mainWindow.webContents.executeJavaScript("document.getElementById('mail-tab').click();");
     } else if (url.includes("notion.so")) {
       shell.openExternal(url.replace("https://", "notion://"));
     // } else if (url.includes("teams.microsoft")) {
@@ -143,14 +143,14 @@ function createMainWindow() {
     }
   }
 
-  function setCurrentsVisibility() {
-    var toBoolean = store.get(USER_PREF_KEYS.SHOW_CURRENTS);
-    if (toBoolean) {
-      mainWindow.webContents.executeJavaScript("$('#currents-li').removeClass('hidden')");
-    } else {
-      mainWindow.webContents.executeJavaScript("$('#currents-li').addClass('hidden')");
-    }
-  }
+  // function setCurrentsVisibility() {
+  //   var toBoolean = store.get(USER_PREF_KEYS.SHOW_CURRENTS);
+  //   if (toBoolean) {
+  //     mainWindow.webContents.executeJavaScript("$('#currents-li').removeClass('hidden')");
+  //   } else {
+  //     mainWindow.webContents.executeJavaScript("$('#currents-li').addClass('hidden')");
+  //   }
+  // }
 
   function setDriveVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_DRIVE);
@@ -161,14 +161,14 @@ function createMainWindow() {
     }
   }
 
-  function setMailVisibility() {
-    var toBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
-    if (toBoolean) {
-      mainWindow.webContents.executeJavaScript("$('#mail-li').removeClass('hidden')");
-    } else {
-      mainWindow.webContents.executeJavaScript("$('#mail-li').addClass('hidden')");
-    }
-  }
+  // function setMailVisibility() {
+  //   var toBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
+  //   if (toBoolean) {
+  //     mainWindow.webContents.executeJavaScript("$('#mail-li').removeClass('hidden')");
+  //   } else {
+  //     mainWindow.webContents.executeJavaScript("$('#mail-li').addClass('hidden')");
+  //   }
+  // }
 
   function setCalendarVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_CALENDAR);
@@ -182,8 +182,8 @@ function createMainWindow() {
   setAdminVisibility();
   setGroupsVisibility();
   setDriveVisibility();
-  setMailVisibility();
-  setCurrentsVisibility();
+  // setMailVisibility();
+  // setCurrentsVisibility();
   setCalendarVisibility();
 
   store.onDidChange(USER_PREF_KEYS.SHOW_ADMIN, () => {
@@ -194,16 +194,16 @@ function createMainWindow() {
     setGroupsVisibility();
   });
 
-  store.onDidChange(USER_PREF_KEYS.SHOW_CURRENTS, () => {
-    setCurrentsVisibility();
-  });
+  // store.onDidChange(USER_PREF_KEYS.SHOW_CURRENTS, () => {
+  //   setCurrentsVisibility();
+  // });
+
+  // store.onDidChange(USER_PREF_KEYS.SHOW_MAIL, () => {
+  //   setMailVisibility();
+  // });
 
   store.onDidChange(USER_PREF_KEYS.SHOW_DRIVE, () => {
     setDriveVisibility();
-  });
-
-  store.onDidChange(USER_PREF_KEYS.SHOW_MAIL, () => {
-    setMailVisibility();
   });
 
   store.onDidChange(USER_PREF_KEYS.SHOW_CALENDAR, () => {
@@ -241,30 +241,30 @@ function createMainWindow() {
   googleGroupsView.webContents.once("dom-ready", handleLoadCommit);
 
 
-  const googleCurrentsView = (global.googleCurrentsView = new BrowserView({
-    webPreferences: {
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleCurrentsView, GOOGLE_CURRENTS_URL, "post-id");
-  ipcMain.on("window.currents", (event) => {
-    handleTabSelection(global.googleCurrentsView);
-  });
-  googleCurrentsView.webContents.on("new-window", handleNavigation);
-  googleCurrentsView.webContents.once("dom-ready", handleLoadCommit);
+  // const googleCurrentsView = (global.googleCurrentsView = new BrowserView({
+  //   webPreferences: {
+  //     preload: path.join(__dirname, "preload-view.js"),
+  //   },
+  // }));
+  // createSubView(mainWindow, googleCurrentsView, GOOGLE_CURRENTS_URL, "post-id");
+  // ipcMain.on("window.currents", (event) => {
+  //   handleTabSelection(global.googleCurrentsView);
+  // });
+  // googleCurrentsView.webContents.on("new-window", handleNavigation);
+  // googleCurrentsView.webContents.once("dom-ready", handleLoadCommit);
 
 
-  const googleMailView = (global.googleMailView = new BrowserView({
-    webPreferences: {
-      preload: path.join(__dirname, "preload-view.js"),
-    },
-  }));
-  createSubView(mainWindow, googleMailView, GOOGLE_MAIL_URL, "mail-id");
-  ipcMain.on("window.mail", (event) => {
-    handleTabSelection(global.googleMailView);
-  });
-  googleMailView.webContents.on("new-window", handleNavigation);
-  googleMailView.webContents.once("dom-ready", handleLoadCommit);
+  // const googleMailView = (global.googleMailView = new BrowserView({
+  //   webPreferences: {
+  //     preload: path.join(__dirname, "preload-view.js"),
+  //   },
+  // }));
+  // createSubView(mainWindow, googleMailView, GOOGLE_MAIL_URL, "mail-id");
+  // ipcMain.on("window.mail", (event) => {
+  //   handleTabSelection(global.googleMailView);
+  // });
+  // googleMailView.webContents.on("new-window", handleNavigation);
+  // googleMailView.webContents.once("dom-ready", handleLoadCommit);
 
 
   const googleMeetView = (global.googleMeetView = new BrowserView({

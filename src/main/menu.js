@@ -37,11 +37,11 @@ const toggleGroupsView = () => {
   store.set(USER_PREF_KEYS.SHOW_GROUPS, currentBoolean);
 }
 
-const toggleCurrentsView = () => {
-  var currentBoolean = store.get(USER_PREF_KEYS.SHOW_CURRENTS);
-  currentBoolean = currentBoolean? false: true;
-  store.set(USER_PREF_KEYS.SHOW_CURRENTS, currentBoolean);
-}
+// const toggleCurrentsView = () => {
+//   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_CURRENTS);
+//   currentBoolean = currentBoolean? false: true;
+//   store.set(USER_PREF_KEYS.SHOW_CURRENTS, currentBoolean);
+// }
 
 const toggleDriveView = () => {
   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_DRIVE);
@@ -49,11 +49,11 @@ const toggleDriveView = () => {
   store.set(USER_PREF_KEYS.SHOW_DRIVE, currentBoolean);
 }
 
-const toggleMailView = () => {
-  var currentBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
-  currentBoolean = currentBoolean? false: true;
-  store.set(USER_PREF_KEYS.SHOW_MAIL, currentBoolean);
-}
+// const toggleMailView = () => {
+//   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_MAIL);
+//   currentBoolean = currentBoolean? false: true;
+//   store.set(USER_PREF_KEYS.SHOW_MAIL, currentBoolean);
+// }
 
 const toggleCalendarView = () => {
   var currentBoolean = store.get(USER_PREF_KEYS.SHOW_CALENDAR);
@@ -149,18 +149,18 @@ const template = [
         checked: store.get(USER_PREF_KEYS.SHOW_GROUPS),
         click: toggleGroupsView,
       },
-      {
-        label: "Currents",
-        type: "checkbox",
-        checked: store.get(USER_PREF_KEYS.SHOW_CURRENTS),
-        click: toggleCurrentsView,
-      },
-      {
-        label: "Mail",
-        type: "checkbox",
-        checked: store.get(USER_PREF_KEYS.SHOW_MAIL),
-        click: toggleMailView,
-      },
+      // {
+      //   label: "Currents",
+      //   type: "checkbox",
+      //   checked: store.get(USER_PREF_KEYS.SHOW_CURRENTS),
+      //   click: toggleCurrentsView,
+      // },
+      // {
+      //   label: "Mail",
+      //   type: "checkbox",
+      //   checked: store.get(USER_PREF_KEYS.SHOW_MAIL),
+      //   click: toggleMailView,
+      // },
       {
         label: "Calendar",
         type: "checkbox",
