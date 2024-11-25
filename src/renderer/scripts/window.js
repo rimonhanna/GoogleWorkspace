@@ -6,7 +6,6 @@ const closeButton = document.getElementById("close");
 
 const admin = document.getElementById("admin-tab");
 const groups = document.getElementById("groups-tab");
-// const currents = document.getElementById("currents-tab");
 // const mail = document.getElementById("mail-tab");
 const chat = document.getElementById("chat-tab");
 const meet = document.getElementById("meet-tab");
@@ -19,9 +18,6 @@ admin.addEventListener("click", () => {
 groups.addEventListener("click", () => {
   ipc.send("window.groups");
 });
-// currents.addEventListener("click", () => {
-//   ipc.send("window.currents");
-// });
 // mail.addEventListener("click", () => {
 //   ipc.send("window.mail");
 // });

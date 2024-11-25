@@ -14,10 +14,6 @@ const schema = {
     type: "boolean",
     default: false,
   },
-  // showCurrents: {
-  //   type: "boolean",
-  //   default: false,
-  // },
   showGroups: {
     type: "boolean",
     default: true,

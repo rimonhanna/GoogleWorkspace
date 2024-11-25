@@ -1,3 +1,4 @@
 node_modules
 /dist
 .actvault
+.DS_Store

@@ -1,6 +1,6 @@
 # Google Workspace Desktop (Unofficial)
 
-**Unofficial desktop application for Google Workspace (Google Meet, Chat, Currents, Drive, Admin, Calendar, Mail, and Groups in one app) built with electron.**
+**Unofficial desktop application for Google Workspace (Google Meet, Chat, Drive, Admin, Calendar, Mail, and Groups in one app) built with electron.**
 
 ![Screenshot of Google Workspace Desktop](.....jpg)
 

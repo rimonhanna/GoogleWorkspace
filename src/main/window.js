@@ -20,7 +20,6 @@ const { TITLE_BAR_HEIGHT, openUrlInBrowser, shouldOpenLinkInBrowser } = require(
 
 const GOOGLE_ADMIN_URL = "https://admin.google.com/";
 const GOOGLE_GROUPS_URL = "https://groups.google.com/my-groups";
-const GOOGLE_CURRENTS_URL = "https://currents.google.com/";
 const GOOGLE_MAIL_URL = "https://mail.google.com/";
 const GOOGLE_CHAT_URL = "https://mail.google.com/chat/u/0/#chat/welcome";
 const GOOGLE_MEET_URL = "https://meet.google.com/";
@@ -93,9 +92,6 @@ function createMainWindow() {
     if (url.includes("meet.google")) {
       global.googleMeetView.webContents.loadURL(url, { userAgent: userAgent });
       mainWindow.webContents.executeJavaScript("document.getElementById('meet-tab').click();");
-    // } else if (url.includes("currents.google")) {
-    //   global.googleCurrentsView.webContents.loadURL(url, { userAgent: userAgent });
-    //   mainWindow.webContents.executeJavaScript("document.getElementById('currents-tab').click();");
     } else if (url.includes("chat.google")) {
       global.googleChatView.webContents.loadURL(url, { userAgent: userAgent });
       mainWindow.webContents.executeJavaScript("document.getElementById('chat-tab').click();");
@@ -143,15 +139,6 @@ function createMainWindow() {
     }
   }
 
-  // function setCurrentsVisibility() {
-  //   var toBoolean = store.get(USER_PREF_KEYS.SHOW_CURRENTS);
-  //   if (toBoolean) {
-  //     mainWindow.webContents.executeJavaScript("$('#currents-li').removeClass('hidden')");
-  //   } else {
-  //     mainWindow.webContents.executeJavaScript("$('#currents-li').addClass('hidden')");
-  //   }
-  // }
-
   function setDriveVisibility() {
     var toBoolean = store.get(USER_PREF_KEYS.SHOW_DRIVE);
     if (toBoolean) {
@@ -183,7 +170,6 @@ function createMainWindow() {
   setGroupsVisibility();
   setDriveVisibility();
   // setMailVisibility();
-  // setCurrentsVisibility();
   setCalendarVisibility();
 
   store.onDidChange(USER_PREF_KEYS.SHOW_ADMIN, () => {
@@ -193,11 +179,7 @@ function createMainWindow() {
   store.onDidChange(USER_PREF_KEYS.SHOW_GROUPS, () => {
     setGroupsVisibility();
   });
-
-  // store.onDidChange(USER_PREF_KEYS.SHOW_CURRENTS, () => {
-  //   setCurrentsVisibility();
-  // });
-
+  
   // store.onDidChange(USER_PREF_KEYS.SHOW_MAIL, () => {
   //   setMailVisibility();
   // });
@@ -239,19 +221,6 @@ function createMainWindow() {
   });
   googleGroupsView.webContents.on("new-window", handleNavigation);
   googleGroupsView.webContents.once("dom-ready", handleLoadCommit);
-
-
-  // const googleCurrentsView = (global.googleCurrentsView = new BrowserView({
-  //   webPreferences: {
-  //     preload: path.join(__dirname, "preload-view.js"),
-  //   },
-  // }));
-  // createSubView(mainWindow, googleCurrentsView, GOOGLE_CURRENTS_URL, "post-id");
-  // ipcMain.on("window.currents", (event) => {
-  //   handleTabSelection(global.googleCurrentsView);
-  // });
-  // googleCurrentsView.webContents.on("new-window", handleNavigation);
-  // googleCurrentsView.webContents.once("dom-ready", handleLoadCommit);
 
 
   // const googleMailView = (global.googleMailView = new BrowserView({
