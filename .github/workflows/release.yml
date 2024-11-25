@@ -27,11 +27,11 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: "14"
+          node-version: "18"
           check-latest: true
 
       - name: Increment version
